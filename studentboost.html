@@ -3,1312 +3,777 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ScholarScout — Find Your Money</title>
+<title>StudentBoost</title>
 <style>
-  :root {
-    --bg: #f9fafb;
-    --text: #111827;
-    --card: #ffffff;
-    --card-fg: #111827;
-    --border: #e5e7eb;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --muted: #6b7280;
-    --ok: #16a34a;
-    --ok-subtle: #dcfce7;
-    --warn: #d97706;
-    --warn-subtle: #fef3c7;
-    --danger: #dc2626;
-    --info: #2563eb;
-    --info-subtle: #eff6ff;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #111827;
-      --text: #f9fafb;
-      --card: #1f2937;
-      --card-fg: #f9fafb;
-      --border: #374151;
-      --accent: #60a5fa;
-      --accent-hover: #93c5fd;
-      --muted: #9ca3af;
-      --ok: #4ade80;
-      --ok-subtle: #14532d;
-      --warn: #fbbf24;
-      --warn-subtle: #451a03;
-      --danger: #f87171;
-      --info: #60a5fa;
-      --info-subtle: #1e3a5f;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 16px;
-    line-height: 1.6;
-  }
-  /* ===== LAYOUT ===== */
-  .page { max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
+:root {
+  --bg:#0a0a0f;--surface:#111118;--surface-2:#18181f;--surface-3:#1e1e28;
+  --border:rgba(255,255,255,0.07);--border-2:rgba(255,255,255,0.12);
+  --text:#f0f0f5;--text-2:#9898b0;--text-3:#55556a;
+  --accent:#7c3aed;--accent-2:#9f5fff;--accent-glow:rgba(124,58,237,0.25);
+  --green:#22c55e;--green-dim:rgba(34,197,94,0.12);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,0.12);
+  --blue:#3b82f6;--blue-dim:rgba(59,130,246,0.12);
+  --r-sm:6px;--r:10px;--r-lg:14px;--r-xl:20px;
+  --sh:0 4px 16px rgba(0,0,0,0.6);
+  --t:0.18s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80% 60% at 50% -20%,rgba(124,58,237,0.15) 0%,transparent 70%);pointer-events:none;z-index:0}
+.page{position:relative;z-index:1;max-width:620px;margin:0 auto;padding:32px 20px 100px}
 
-  /* ===== HERO ===== */
-  .hero {
-    text-align: center;
-    padding: 40px 16px 32px;
-    background: var(--card);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    margin-bottom: 28px;
-  }
-  .hero-emoji { font-size: 52px; margin-bottom: 12px; }
-  .hero h1 { font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-  .hero p { color: var(--muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:flex-end;padding:10px 20px;background:rgba(10,10,15,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.lang-switcher{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:3px}
+.lang-btn{background:none;border:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-3);padding:4px 10px;border-radius:6px;transition:all var(--t)}
+.lang-btn:hover{color:var(--text-2)}
+.lang-btn.active{background:var(--accent);color:#fff;box-shadow:0 0 8px var(--accent-glow)}
 
-  /* ===== PROGRESS BAR ===== */
-  .progress-wrap { margin-bottom: 24px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-  .progress-bar { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
+/* HERO */
+.hero{text-align:center;padding:64px 24px 40px;margin-bottom:32px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:var(--accent-2);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:20px}
+.hero h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:800;letter-spacing:-0.04em;line-height:1.1;background:linear-gradient(135deg,#f0f0f5 0%,#9898b0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px}
+.hero p{color:var(--text-2);font-size:1rem;max-width:420px;margin:0 auto;line-height:1.7}
 
-  /* ===== STEP CARD ===== */
-  .step-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 24px;
-    margin-bottom: 20px;
-  }
-  .step-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-  .step-sub { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+/* PROGRESS */
+.progress-shell{margin-bottom:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 20px}
+.progress-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.progress-step-label{font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-3)}
+.progress-pct{font-size:12px;font-weight:600;color:var(--accent-2);background:rgba(124,58,237,0.15);padding:2px 8px;border-radius:99px}
+.steps-dots{display:flex;gap:4px}
+.step-dot{flex:1;height:3px;border-radius:99px;background:var(--surface-3);transition:background var(--t),box-shadow var(--t)}
+.step-dot.done{background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+.step-dot.active{background:var(--accent-2);box-shadow:0 0 12px var(--accent-glow)}
 
-  /* ===== FORM ELEMENTS ===== */
-  label.field-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 6px;
-    margin-top: 18px;
-  }
-  label.field-label:first-child { margin-top: 0; }
-  .hint { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: block; }
+/* STEP CARD */
+.step-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px 24px;margin-bottom:16px;box-shadow:var(--sh);animation:slideIn 0.22s cubic-bezier(0.4,0,0.2,1)}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.step-eyebrow{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-2);margin-bottom:6px}
+.step-title{font-size:1.4rem;font-weight:800;letter-spacing:-0.025em;color:var(--text);margin-bottom:5px;line-height:1.25}
+.step-sub{font-size:14px;color:var(--text-2);margin-bottom:24px;line-height:1.5}
+.divider{height:1px;background:var(--border);margin:20px 0}
+.field-label{display:block;font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:6px;margin-top:20px;letter-spacing:0.02em}
+.field-label:first-child{margin-top:0}
+.field-hint{font-size:12px;color:var(--text-3);margin-bottom:8px;display:block;font-style:italic}
 
-  input[type="text"],
-  input[type="number"],
-  select,
-  input[type="range"] {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input[type="text"]:focus,
-  input[type="number"]:focus,
-  select:focus {
-    border-color: var(--accent);
-  }
-  input[type="range"] { padding: 4px 0; cursor: pointer; }
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border:1px solid var(--border-2);border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:var(--text-2);background:var(--surface-2);transition:all var(--t);user-select:none;position:relative;overflow:hidden}
+.chip:hover{border-color:rgba(124,58,237,0.4);color:var(--text);background:var(--surface-3)}
+.chip:has(input:checked){border-color:var(--accent);background:rgba(124,58,237,0.18);color:var(--accent-2);box-shadow:0 0 0 1px rgba(124,58,237,0.3),0 0 16px rgba(124,58,237,0.1)}
+.chip input{display:none}
 
-  /* checkbox group */
-  .check-group { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-  .check-item {
-    display: flex; align-items: flex-start; gap: 12px;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    user-select: none;
-  }
-  .check-item:has(input:checked) {
-    border-color: var(--accent);
-    background: var(--info-subtle);
-  }
-  .check-item input { margin-top: 3px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
-  .check-item-text strong { display: block; font-size: 14px; font-weight: 600; color: var(--text); }
-  .check-item-text span { font-size: 12px; color: var(--muted); }
+/* CHECKBOXES */
+.checks{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.check{display:flex;align-items:flex-start;gap:13px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 16px;cursor:pointer;transition:all var(--t);user-select:none;position:relative}
+.check::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent);border-radius:var(--r-lg) 0 0 var(--r-lg);transition:width var(--t)}
+.check:has(input:checked)::before{width:3px}
+.check:has(input:checked){border-color:rgba(124,58,237,0.35);background:rgba(124,58,237,0.08)}
+.check:hover{border-color:var(--border-2)}
+.check input{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:var(--accent)}
+.check-text strong{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.check-text small{font-size:12px;color:var(--text-3)}
 
-  /* radio group */
-  .radio-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-  .radio-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 99px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    background: var(--bg);
-    transition: all 0.15s;
-    user-select: none;
-  }
-  .radio-chip:has(input:checked) {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: #fff;
-  }
-  .radio-chip input { display: none; }
+/* SELECT */
+select{width:100%;padding:11px 14px;border:1px solid var(--border-2);border-radius:var(--r);background:var(--surface-2);color:var(--text);font-size:14px;outline:none;transition:border-color var(--t);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%239898b0'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select:focus{border-color:rgba(124,58,237,0.6);box-shadow:0 0 0 2px rgba(124,58,237,0.12)}
+select option{background:var(--surface-3)}
 
-  /* ===== BUTTONS ===== */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 13px 28px;
-    border: none; border-radius: 10px;
-    font-size: 15px; font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-  }
-  .btn:active { transform: scale(0.98); }
-  .btn-primary { background: var(--accent); color: #fff; width: 100%; }
-  .btn-primary:hover { background: var(--accent-hover); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--accent);
-    border: 1.5px solid var(--accent);
-    padding: 10px 20px;
-    font-size: 14px;
-  }
+/* GPA SLIDER */
+.gpa-wrap{margin-top:8px}
+.gpa-slider-row{display:flex;align-items:center;gap:14px;padding:12px 0}
+input#gpaRange{flex:1;height:6px;cursor:grab;-webkit-appearance:none;appearance:none;outline:none;border:none;background:transparent;touch-action:none}
+input#gpaRange:active{cursor:grabbing}
+input#gpaRange::-webkit-slider-runnable-track{width:100%;height:6px;background:var(--surface-3);border-radius:99px;cursor:grab}
+input#gpaRange:active::-webkit-slider-runnable-track{cursor:grabbing}
+input#gpaRange::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-9px;background:var(--accent-2);border-radius:50%;cursor:grab;box-shadow:0 0 0 4px rgba(124,58,237,0.22),0 2px 6px rgba(0,0,0,0.5);transition:box-shadow var(--t),transform var(--t)}
+input#gpaRange::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(124,58,237,0.3),0 2px 6px rgba(0,0,0,0.5)}
+input#gpaRange:active::-webkit-slider-thumb{transform:scale(1.12);cursor:grabbing}
+input#gpaRange::-moz-range-track{width:100%;height:6px;background:var(--surface-3);border-radius:99px;border:none}
+input#gpaRange::-moz-range-thumb{width:24px;height:24px;background:var(--accent-2);border:none;border-radius:50%;cursor:grab;box-shadow:0 0 0 4px rgba(124,58,237,0.22)}
+input#gpaRange:active::-moz-range-thumb{cursor:grabbing;transform:scale(1.12)}
+.gpa-value-badge{font-size:1.4rem;font-weight:800;letter-spacing:-0.04em;color:var(--accent-2);text-shadow:0 0 20px rgba(124,58,237,0.4);min-width:44px;text-align:center;flex-shrink:0}
+.gpa-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-top:2px}
 
-  /* ===== RESULTS ===== */
-  .results-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .results-header h2 { font-size: 1.6rem; font-weight: 800; }
-  .results-header p { color: var(--muted); margin-top: 6px; }
-  .results-count {
-    display: inline-block;
-    background: var(--ok-subtle);
-    color: var(--ok);
-    font-weight: 700;
-    font-size: 13px;
-    padding: 4px 12px;
-    border-radius: 99px;
-    margin-top: 8px;
-  }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border:none;border-radius:var(--r);font-size:14px;font-weight:700;letter-spacing:0.01em;cursor:pointer;transition:all var(--t);position:relative;overflow:hidden}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent) 0%,#6d28d9 100%);color:#fff;box-shadow:0 0 0 1px rgba(124,58,237,0.5),0 4px 16px rgba(124,58,237,0.3)}
+.btn-primary:hover{box-shadow:0 0 0 1px rgba(124,58,237,0.7),0 4px 24px rgba(124,58,237,0.45);transform:translateY(-1px)}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);pointer-events:none}
+.btn-full{width:100%;margin-top:20px}
+.btn-ghost{background:transparent;color:var(--text-2);border:1px solid var(--border-2)}
+.btn-ghost:hover{background:var(--surface-2);border-color:rgba(255,255,255,0.16);color:var(--text)}
+.btn-row{display:flex;gap:10px;margin-top:20px}
+.btn-row .btn-primary{flex:1}
 
-  .result-card {
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    margin-bottom: 16px;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .result-card:hover { border-color: var(--accent); }
+/* RESULTS */
+.results-header{text-align:center;margin-bottom:28px;padding:32px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);position:relative;overflow:hidden}
+.results-header::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:300px;height:200px;background:radial-gradient(ellipse,rgba(124,58,237,0.2) 0%,transparent 70%);pointer-events:none}
+.results-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-2);margin-bottom:10px}
+.results-header h2{font-size:1.7rem;font-weight:800;letter-spacing:-0.03em;color:var(--text);margin-bottom:8px}
+.results-header p{font-size:14px;color:var(--text-2)}
+.results-count{display:inline-flex;align-items:center;gap:6px;background:var(--green-dim);border:1px solid rgba(34,197,94,0.2);color:var(--green);font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;margin-top:12px}
+.results-count::before{content:'✓';font-size:10px}
 
-  .result-header {
-    padding: 18px 20px 14px;
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
-  }
-  .result-title { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .result-amount {
-    font-size: 1.1rem; font-weight: 800;
-    color: var(--ok);
-    white-space: nowrap;
-  }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .badge {
-    font-size: 11px; font-weight: 600;
-    padding: 3px 8px; border-radius: 99px;
-  }
-  .badge-visa { background: var(--info-subtle); color: var(--info); }
-  .badge-type { background: var(--warn-subtle); color: var(--warn); }
-  .badge-match { background: var(--ok-subtle); color: var(--ok); }
+/* TABS */
+.cat-nav{display:flex;overflow-x:auto;gap:6px;padding-bottom:4px;margin-bottom:24px;scrollbar-width:none}
+.cat-nav::-webkit-scrollbar{display:none}
+.cat-btn{white-space:nowrap;padding:7px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text-2);transition:all var(--t);flex-shrink:0}
+.cat-btn:hover{border-color:var(--border-2);color:var(--text)}
+.cat-btn.active{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.12);color:var(--accent-2);box-shadow:0 0 0 1px rgba(124,58,237,0.2)}
 
-  .result-steps { padding: 0 20px 20px; }
-  .steps-label {
-    font-size: 12px; font-weight: 700; text-transform: uppercase;
-    color: var(--muted); letter-spacing: 0.05em;
-    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
-  }
-  .step-list { display: flex; flex-direction: column; gap: 8px; }
-  .step-item {
-    display: flex; gap: 12px; align-items: flex-start;
-    background: var(--bg);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-  .step-num {
-    background: var(--accent);
-    color: #fff;
-    font-size: 11px; font-weight: 800;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .step-text { color: var(--card-fg); line-height: 1.4; }
-  .step-text a { color: var(--accent); }
+/* RESULT CARDS */
+.cat-section{margin-bottom:32px}
+.cat-heading{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;transition:border-color var(--t),transform var(--t),box-shadow var(--t)}
+.rcard:hover{border-color:var(--border-2);transform:translateY(-1px);box-shadow:var(--sh)}
+.rcard-head{padding:16px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;border-bottom:1px solid var(--border)}
+.rcard-title{font-size:15px;font-weight:700;letter-spacing:-0.01em;color:var(--text);margin-bottom:3px;line-height:1.3}
+.rcard-desc{font-size:13px;color:var(--text-2);line-height:1.45;margin-bottom:6px}
+.rcard-amount{font-size:14px;font-weight:800;color:var(--green);white-space:nowrap;background:var(--green-dim);padding:4px 10px;border-radius:var(--r-sm);border:1px solid rgba(34,197,94,0.18);flex-shrink:0}
+.badges{display:flex;flex-wrap:wrap;gap:5px}
+.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;letter-spacing:0.01em}
+.badge-type{background:var(--surface-3);color:var(--text-2);border:1px solid var(--border)}
+.badge-need{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+.badge-open{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(59,130,246,0.2)}
+.badge-gpa{background:rgba(124,58,237,0.12);color:var(--accent-2);border:1px solid rgba(124,58,237,0.2)}
+.rcard-body{padding:16px 20px 20px}
+.steps-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.steps-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.step-list{display:flex;flex-direction:column;gap:6px}
+.step-item{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:13px;transition:border-color var(--t)}
+.step-item:hover{border-color:var(--border-2)}
+.step-num{background:var(--accent);color:#fff;font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{color:var(--text-2);line-height:1.5;flex:1}
+.step-text a{color:var(--accent-2);text-decoration:none}
+.step-text a:hover{text-decoration:underline}
+.card-footer{margin-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.deadline-pill{display:inline-flex;align-items:center;gap:5px;background:var(--amber-dim);border:1px solid rgba(245,158,11,0.18);color:var(--amber);font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px}
+.notebox{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:9px 12px;font-size:12px;color:var(--text-2);line-height:1.5;margin-top:10px}
+.apply-link{display:inline-flex;align-items:center;gap:5px;color:var(--accent-2);font-size:12px;font-weight:600;text-decoration:none;padding:5px 12px;border:1px solid rgba(124,58,237,0.3);border-radius:var(--r-sm);background:rgba(124,58,237,0.08);transition:all var(--t)}
+.apply-link:hover{background:rgba(124,58,237,0.16);border-color:rgba(124,58,237,0.5)}
 
-  .deadline-warn {
-    background: var(--warn-subtle);
-    color: var(--warn);
-    font-size: 13px; font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 8px;
-    margin-top: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
+/* FAFSA ALERT */
+.alert-card{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.25);border-radius:var(--r-lg);margin-bottom:16px;overflow:hidden}
+.alert-head{padding:14px 20px;display:flex;align-items:center;gap:10px}
+.alert-title{font-size:14px;font-weight:700;color:var(--amber)}
+.alert-sub{font-size:12px;color:var(--text-2);margin-top:1px}
 
-  /* ===== NO RESULTS ===== */
-  .no-results {
-    text-align: center; padding: 40px 20px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-  }
-  .no-results-emoji { font-size: 48px; margin-bottom: 12px; }
-  .no-results h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-  .no-results p { color: var(--muted); font-size: 14px; }
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 24px;background:var(--surface);border:1px dashed var(--border-2);border-radius:var(--r-xl)}
+.empty-icon{font-size:40px;margin-bottom:14px;opacity:0.6}
+.empty-state h3{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.empty-state p{font-size:13px;color:var(--text-2);max-width:300px;margin:0 auto}
 
-  /* ===== UTIL ===== */
-  .hidden { display: none !important; }
-  .mt-4 { margin-top: 16px; }
-  .mt-2 { margin-top: 8px; }
-  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-  .gpa-display {
-    text-align: center; font-size: 1.4rem; font-weight: 800;
-    color: var(--accent); margin-top: 4px;
-  }
-
-  @media (max-width: 480px) {
-    .result-header { flex-direction: column; }
-    .hero h1 { font-size: 1.5rem; }
-  }
-
-/* === LANGUAGE SWITCHER === */
-.lang-bar{position:fixed;top:14px;right:14px;z-index:900}
-.lang-btn{display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:600;color:var(--text-2);transition:all var(--t);user-select:none}
-.lang-btn:hover{border-color:rgba(124,58,237,0.4);color:var(--text)}
-.lang-chev{font-size:9px;opacity:0.6;transition:transform var(--t)}
-.lang-btn.open .lang-chev{transform:rotate(180deg)}
-.lang-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--r-lg);overflow:hidden;min-width:155px;box-shadow:0 8px 32px rgba(0,0,0,0.65);flex-direction:column}
-.lang-menu.open{display:flex}
-.lang-opt{display:flex;align-items:center;gap:9px;padding:9px 14px;font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;transition:background var(--t),color var(--t)}
-.lang-opt:hover{background:var(--surface-2);color:var(--text)}
-.lang-opt.active{color:var(--accent-2);background:rgba(124,58,237,0.08)}
-/* === CHATBOT === */
-.chat-fab{position:fixed;bottom:24px;right:24px;z-index:900;width:54px;height:54px;background:linear-gradient(135deg,var(--accent),#6d28d9);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.55);transition:transform var(--t),box-shadow var(--t);animation:fabPulse 3s ease-in-out infinite}
-@keyframes fabPulse{0%,100%{box-shadow:0 4px 20px rgba(124,58,237,0.55),0 0 0 0 rgba(124,58,237,0.3)}60%{box-shadow:0 4px 20px rgba(124,58,237,0.55),0 0 0 9px rgba(124,58,237,0)}}
-.chat-fab:hover{transform:scale(1.09);animation:none;box-shadow:0 6px 28px rgba(124,58,237,0.75)}
-.fab-icon{width:24px;height:24px;fill:#fff}
-.fab-close{display:none;font-size:22px;color:#fff;font-weight:700;line-height:1}
-.chat-fab.is-open .fab-icon{display:none}
-.chat-fab.is-open .fab-close{display:block}
-.chat-fab.is-open{animation:none}
-.chat-win{position:fixed;bottom:90px;right:24px;z-index:899;width:330px;max-width:calc(100vw - 32px);height:470px;max-height:calc(100vh - 108px);background:var(--surface);border:1px solid var(--border-2);border-radius:var(--r-xl);box-shadow:0 20px 60px rgba(0,0,0,0.75);display:flex;flex-direction:column;overflow:hidden;transform:scale(0.9) translateY(20px);opacity:0;pointer-events:none;transition:transform 0.2s cubic-bezier(0.4,0,0.2,1),opacity 0.2s ease;transform-origin:bottom right}
-.chat-win.is-open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
-.chat-hdr{padding:13px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
-.chat-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#6d28d9);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.chat-hdr-name{font-size:14px;font-weight:700;color:var(--text)}
-.chat-hdr-st{font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px;margin-top:1px}
-.chat-hdr-st::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block}
-.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.chat-msgs::-webkit-scrollbar{width:3px}
-.chat-msgs::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:99px}
-.cmsg{max-width:90%;padding:9px 12px;border-radius:var(--r-lg);font-size:13px;line-height:1.5;animation:msgIn 0.14s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.cmsg.bot{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);align-self:flex-start;border-radius:4px var(--r-lg) var(--r-lg) var(--r-lg)}
-.cmsg.user{background:linear-gradient(135deg,var(--accent),#6d28d9);color:#fff;align-self:flex-end;border-radius:var(--r-lg) 4px var(--r-lg) var(--r-lg)}
-.cmsg a{color:var(--accent-2);text-decoration:underline}
-.sugs{padding:0 12px 8px;display:flex;flex-wrap:wrap;gap:6px}
-.sug{font-size:11px;padding:5px 10px;border:1px solid var(--border-2);border-radius:99px;background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:all var(--t)}
-.sug:hover{border-color:rgba(124,58,237,0.4);color:var(--accent-2)}
-.chat-inp-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
-.chat-inp{flex:1;padding:9px 12px;background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--r);color:var(--text);font-size:13px;outline:none;transition:border-color var(--t)}
-.chat-inp:focus{border-color:rgba(124,58,237,0.5)}
-.chat-inp::placeholder{color:var(--text-3)}
-.chat-send{width:34px;height:34px;flex-shrink:0;background:var(--accent);border:none;border-radius:var(--r);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background var(--t)}
+/* CHATBOT */
+.chat-bubble{position:fixed;bottom:24px;right:24px;z-index:200;width:52px;height:52px;background:linear-gradient(135deg,var(--accent),#6d28d9);border-radius:50%;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.5);display:flex;align-items:center;justify-content:center;font-size:22px;transition:all var(--t)}
+.chat-bubble:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(124,58,237,0.65)}
+.chat-panel{position:fixed;bottom:88px;right:24px;z-index:200;width:340px;max-height:480px;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--r-xl);box-shadow:0 20px 60px rgba(0,0,0,0.7);display:flex;flex-direction:column;overflow:hidden;animation:slideIn 0.2s ease}
+.chat-panel.hidden{display:none}
+.chat-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chat-header-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),#6d28d9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.chat-header-text strong{display:block;font-size:14px;font-weight:700;color:var(--text)}
+.chat-header-text small{font-size:11px;color:var(--green)}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-height:300px;scrollbar-width:thin;scrollbar-color:var(--surface-3) transparent}
+.chat-msg{max-width:85%;padding:9px 13px;border-radius:var(--r-lg);font-size:13px;line-height:1.5}
+.chat-msg.bot{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);align-self:flex-start;border-radius:4px var(--r-lg) var(--r-lg) var(--r-lg)}
+.chat-msg.user{background:var(--accent);color:#fff;align-self:flex-end;border-radius:var(--r-lg) 4px var(--r-lg) var(--r-lg)}
+.chat-suggestions{padding:8px 14px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px solid var(--border)}
+.chat-sug{background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);font-size:11px;padding:4px 9px;border-radius:99px;cursor:pointer;transition:all var(--t)}
+.chat-sug:hover{border-color:var(--accent);color:var(--accent-2)}
+.chat-input-row{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border)}
+.chat-input{flex:1;background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--r);padding:8px 12px;font-size:13px;color:var(--text);outline:none;transition:border-color var(--t)}
+.chat-input:focus{border-color:rgba(124,58,237,0.5)}
+.chat-send{background:var(--accent);border:none;border-radius:var(--r);padding:8px 12px;color:#fff;cursor:pointer;font-size:13px;font-weight:700;transition:all var(--t)}
 .chat-send:hover{background:var(--accent-2)}
-.tdots{display:flex;gap:4px;padding:4px 2px}
-.tdots span{width:6px;height:6px;background:var(--text-3);border-radius:50%;animation:td 1.2s infinite}
-.tdots span:nth-child(2){animation-delay:.2s}
-.tdots span:nth-child(3){animation-delay:.4s}
-@keyframes td{0%,80%,100%{opacity:.3}40%{opacity:1}}
-@media(max-width:520px){.lang-bar{top:10px;right:10px}.chat-win{width:calc(100vw - 32px)}}
+
+.hidden{display:none!important}
+.mt-6{margin-top:24px}
+.center{text-align:center}
+@media(max-width:520px){.rcard-head{flex-direction:column}.hero h1{font-size:1.9rem}.page{padding:20px 14px 80px}.chat-panel{width:calc(100vw - 32px);right:16px}}
 </style>
 </head>
 <body>
-<div class="lang-bar" id="langBar">
-  <div class="lang-btn" id="langBtn">
-    <span id="langFlag">&#127482;&#127480;</span>
-    <span id="langLabel">EN</span>
-    <span class="lang-chev">&#9660;</span>
-  </div>
-  <div class="lang-menu" id="langMenu">
-    <div class="lang-opt active" data-l="en">&#127482;&#127480; English</div>
-    <div class="lang-opt" data-l="es">&#127466;&#127480; Espa&#241;ol</div>
-    <div class="lang-opt" data-l="fr">&#127467;&#127479; Fran&#231;ais</div>
-    <div class="lang-opt" data-l="de">&#127465;&#127466; Deutsch</div>
-    <div class="lang-opt" data-l="zh">&#127464;&#127475; &#20013;&#25991;</div>
-    <div class="lang-opt" data-l="ar">&#127480;&#127462; &#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</div>
-  </div>
-</div>
-<div class="chat-fab" id="chatFab" title="Ask a question">
-  <svg class="fab-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-  <span class="fab-close">&#x2715;</span>
-</div>
-<div class="chat-win" id="chatWin">
-  <div class="chat-hdr">
-    <div class="chat-av">&#129302;</div>
-    <div>
-      <div class="chat-hdr-name" id="chatHdrName">StudentBoost Assistant</div>
-      <div class="chat-hdr-st" id="chatHdrSt">Online &#8212; ask me anything</div>
-    </div>
-  </div>
-  <div class="chat-msgs" id="chatMsgs"></div>
-  <div class="sugs" id="chatSugs"></div>
-  <div class="chat-inp-row">
-    <input class="chat-inp" id="chatInp" type="text" autocomplete="off" placeholder="Type a question..."/>
-    <button class="chat-send" id="chatSend">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
+
+<!-- TOPBAR with language switcher -->
+<div class="topbar">
+  <div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
   </div>
 </div>
 
 <div class="page">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-emoji">🎓</div>
-    <h1>ScholarScout</h1>
-    <p>Answer a few questions. We find the money you didn't know existed.</p>
+<div class="hero">
+  <div class="hero-badge" data-i18n="badge">✦ Free &amp; Private Student Benefits Finder</div>
+  <h1 data-i18n="headline">Find every benefit<br/>you're missing out on</h1>
+  <p data-i18n="subline">Answer 4 quick questions. We match you to scholarships, housing aid, food programs, health insurance, and more.</p>
+</div>
+
+<div class="progress-shell" id="progressWrap">
+  <div class="progress-meta">
+    <span class="progress-step-label" id="progressText">Step 1 of 4</span>
+    <span class="progress-pct" id="progressPct">25%</span>
   </div>
-
-  <!-- PROGRESS -->
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-label">
-      <span id="progressText">Step 1 of 4</span>
-      <span id="progressPct">25%</span>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width:25%"></div>
-    </div>
+  <div class="steps-dots">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+    <div class="step-dot" id="dot4"></div>
   </div>
+</div>
 
-  <!-- ========================= STEP 1 ========================= -->
-  <div class="step-card" id="step1">
-    <div class="step-title">👤 About You</div>
-    <div class="step-sub">This helps us filter what you actually qualify for.</div>
-
-    <label class="field-label">What country are you from?</label>
-    <input type="text" id="country" placeholder="e.g. Germany, Nigeria, USA…" />
-
-    <label class="field-label">What is your visa / residency status in the US?</label>
-    <span class="hint">Not sure? Check your I-94 form or visa stamp.</span>
-    <div class="radio-group" id="visaGroup">
-      <label class="radio-chip"><input type="radio" name="visa" value="citizen"> 🇺🇸 US Citizen</label>
-      <label class="radio-chip"><input type="radio" name="visa" value="permanent_resident"> 🟢 Green Card</label>
-      <label class="radio-chip"><input type="radio" name="visa" value="daca"> 🛡️ DACA</label>
-      <label class="radio-chip"><input type="radio" name="visa" value="f1"> 📚 F-1 (Student)</label>
-      <label class="radio-chip"><input type="radio" name="visa" value="j1"> 🔬 J-1 (Exchange)</label>
-      <label class="radio-chip"><input type="radio" name="visa" value="other_nonimmigrant"> 🌐 Other Visa</label>
-      <label class="radio-chip"><input type="radio" name="visa" value="undocumented"> ✊ Undocumented</label>
-    </div>
-
-    <label class="field-label" style="margin-top:20px">Are you a first-generation college student?</label>
-    <span class="hint">First-gen = neither of your parents finished a 4-year college degree.</span>
-    <div class="radio-group">
-      <label class="radio-chip"><input type="radio" name="firstgen" value="yes"> ✅ Yes</label>
-      <label class="radio-chip"><input type="radio" name="firstgen" value="no"> ❌ No</label>
-      <label class="radio-chip"><input type="radio" name="firstgen" value="unsure"> 🤷 Not sure</label>
-    </div>
-
-    <button class="btn btn-primary mt-4" onclick="goStep(2)">Next →</button>
+<!-- STEP 1 -->
+<div class="step-card" id="step1">
+  <div class="step-eyebrow" data-i18n="s1eye">Step 1 of 4</div>
+  <div class="step-title" data-i18n="s1title">Who are you?</div>
+  <div class="step-sub" data-i18n="s1sub">This determines which programs you're legally eligible for.</div>
+  <label class="field-label" data-i18n="s1visa">Visa / residency status in the US</label>
+  <span class="field-hint" data-i18n="s1visa_hint">Not sure? Check your I-94 form or passport visa stamp.</span>
+  <div class="chips">
+    <label class="chip"><input type="radio" name="visa" value="citizen"> 🇺🇸 US Citizen</label>
+    <label class="chip"><input type="radio" name="visa" value="pr"> 🟢 Green Card</label>
+    <label class="chip"><input type="radio" name="visa" value="daca"> 🛡️ DACA</label>
+    <label class="chip"><input type="radio" name="visa" value="f1"> 📚 F-1 Student</label>
+    <label class="chip"><input type="radio" name="visa" value="j1"> 🔬 J-1 Exchange</label>
+    <label class="chip"><input type="radio" name="visa" value="other_visa"> 🌐 Other Visa</label>
+    <label class="chip"><input type="radio" name="visa" value="undocumented"> ✊ Undocumented</label>
   </div>
-
-  <!-- ========================= STEP 2 ========================= -->
-  <div class="step-card hidden" id="step2">
-    <div class="step-title">🏫 Your Studies</div>
-    <div class="step-sub">Tell us about your school and program.</div>
-
-    <label class="field-label">What level are you studying at?</label>
-    <div class="radio-group">
-      <label class="radio-chip"><input type="radio" name="level" value="undergrad"> 🎒 Undergrad</label>
-      <label class="radio-chip"><input type="radio" name="level" value="grad"> 🔬 Graduate</label>
-      <label class="radio-chip"><input type="radio" name="level" value="phd"> 🧠 PhD</label>
-      <label class="radio-chip"><input type="radio" name="level" value="community"> 🏘️ Community College</label>
-      <label class="radio-chip"><input type="radio" name="level" value="vocational"> 🔧 Vocational / Trade</label>
-    </div>
-
-    <label class="field-label" style="margin-top:20px">What is your GPA? (Leave at 0 if you don't know)</label>
-    <input type="range" id="gpaRange" min="0" max="4" step="0.1" value="0" oninput="updateGpa(this.value)" />
-    <div class="gpa-display" id="gpaDisplay">0.0 / 4.0</div>
-
-    <label class="field-label" style="margin-top:20px">What is your field of study?</label>
-    <select id="field">
-      <option value="">— Pick one —</option>
-      <option value="stem">STEM (Science, Tech, Engineering, Math)</option>
-      <option value="health">Health / Nursing / Medicine</option>
-      <option value="education">Education / Teaching</option>
-      <option value="arts">Arts / Humanities / Social Science</option>
-      <option value="business">Business / Economics</option>
-      <option value="law">Law / Political Science</option>
-      <option value="other">Other</option>
-    </select>
-
-    <div style="display:flex; gap:10px; margin-top:20px">
-      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
-      <button class="btn btn-primary" style="flex:1" onclick="goStep(3)">Next →</button>
-    </div>
+  <div class="divider"></div>
+  <label class="field-label" data-i18n="s1fg">First-generation college student?</label>
+  <span class="field-hint" data-i18n="s1fg_hint">Neither parent completed a 4-year college degree.</span>
+  <div class="chips">
+    <label class="chip"><input type="radio" name="firstgen" value="yes" data-i18n="fg_yes"> Yes, first-gen</label>
+    <label class="chip"><input type="radio" name="firstgen" value="no" data-i18n="fg_no"> No</label>
+    <label class="chip"><input type="radio" name="firstgen" value="unsure" data-i18n="fg_unsure"> Not sure</label>
   </div>
+  <button class="btn btn-primary btn-full" id="btn1n" data-i18n="continue">Continue →</button>
+</div>
 
-  <!-- ========================= STEP 3 ========================= -->
-  <div class="step-card hidden" id="step3">
-    <div class="step-title">💰 Your Finances</div>
-    <div class="step-sub">We never share this. It just helps match need-based aid.</div>
-
-    <label class="field-label">What is your family's yearly income (USD)?</label>
-    <span class="hint">Estimate is fine. This filters need-based aid.</span>
-    <div class="radio-group">
-      <label class="radio-chip"><input type="radio" name="income" value="0"> Under $30k</label>
-      <label class="radio-chip"><input type="radio" name="income" value="1"> $30k – $60k</label>
-      <label class="radio-chip"><input type="radio" name="income" value="2"> $60k – $100k</label>
-      <label class="radio-chip"><input type="radio" name="income" value="3"> Over $100k</label>
-      <label class="radio-chip"><input type="radio" name="income" value="skip"> Prefer not to say</label>
-    </div>
-
-    <label class="field-label" style="margin-top:20px">Have you filled out a FAFSA this year?</label>
-    <span class="hint">FAFSA is a free US government form. F-1/J-1 students cannot use it.</span>
-    <div class="radio-group">
-      <label class="radio-chip"><input type="radio" name="fafsa" value="yes"> ✅ Yes</label>
-      <label class="radio-chip"><input type="radio" name="fafsa" value="no"> ❌ No</label>
-      <label class="radio-chip"><input type="radio" name="fafsa" value="cant"> ⛔ I can't (F-1/J-1)</label>
-      <label class="radio-chip"><input type="radio" name="fafsa" value="unsure"> 🤷 Not sure</label>
-    </div>
-
-    <div style="display:flex; gap:10px; margin-top:20px">
-      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
-      <button class="btn btn-primary" style="flex:1" onclick="goStep(4)">Next →</button>
-    </div>
+<!-- STEP 2 -->
+<div class="step-card hidden" id="step2">
+  <div class="step-eyebrow" data-i18n="s2eye">Step 2 of 4</div>
+  <div class="step-title" data-i18n="s2title">Your studies</div>
+  <div class="step-sub" data-i18n="s2sub">Program type and academic standing affect eligibility.</div>
+  <label class="field-label" data-i18n="s2level">Level of study</label>
+  <div class="chips">
+    <label class="chip"><input type="radio" name="level" value="undergrad"> 🎒 Undergrad</label>
+    <label class="chip"><input type="radio" name="level" value="grad"> 🔬 Graduate</label>
+    <label class="chip"><input type="radio" name="level" value="phd"> 🧠 PhD</label>
+    <label class="chip"><input type="radio" name="level" value="community"> 🏘️ Community College</label>
+    <label class="chip"><input type="radio" name="level" value="vocational"> 🔧 Vocational / Trade</label>
   </div>
-
-  <!-- ========================= STEP 4 ========================= -->
-  <div class="step-card hidden" id="step4">
-    <div class="step-title">🌟 Your Background</div>
-    <div class="step-sub">Some aid is specifically for certain groups. Check all that apply.</div>
-
-    <div class="check-group">
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="minority" />
-        <div class="check-item-text">
-          <strong>Underrepresented minority</strong>
-          <span>Black, Hispanic/Latino, Native American, Pacific Islander</span>
-        </div>
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="woman" />
-        <div class="check-item-text">
-          <strong>Woman / non-binary</strong>
-          <span>Many STEM scholarships target gender diversity</span>
-        </div>
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="disability" />
-        <div class="check-item-text">
-          <strong>Has a disability</strong>
-          <span>Physical, learning, or mental health disability</span>
-        </div>
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="veteran" />
-        <div class="check-item-text">
-          <strong>Veteran or military family</strong>
-          <span>Active duty, reserves, or dependent</span>
-        </div>
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="foster" />
-        <div class="check-item-text">
-          <strong>Foster care / aging out</strong>
-          <span>Were in the foster care system</span>
-        </div>
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="dreamer" />
-        <div class="check-item-text">
-          <strong>Dreamer / immigrant student</strong>
-          <span>Came to the US before age 16 as an immigrant</span>
-        </div>
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="bg" value="lgbtq" />
-        <div class="check-item-text">
-          <strong>LGBTQ+</strong>
-          <span>Scholarships exist specifically for LGBTQ+ students</span>
-        </div>
-      </label>
+  <div class="divider"></div>
+  <label class="field-label" data-i18n="s2gpa">Current GPA</label>
+  <span class="field-hint" data-i18n="s2gpa_hint">Drag the slider. Leave at 0.0 if you don't know.</span>
+  <div class="gpa-wrap">
+    <div class="gpa-slider-row">
+      <input type="range" id="gpaRange" min="0" max="4" step="0.1" value="0"/>
+      <div class="gpa-value-badge" id="gpaDisplay">0.0</div>
     </div>
-
-    <div style="display:flex; gap:10px; margin-top:24px">
-      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
-      <button class="btn btn-primary" style="flex:1" onclick="findScholarships()">🔍 Find My Scholarships</button>
-    </div>
+    <div class="gpa-labels"><span>0.0</span><span>1.0</span><span>2.0</span><span>3.0</span><span>4.0</span></div>
   </div>
-
-  <!-- ========================= RESULTS ========================= -->
-  <div class="hidden" id="results">
-    <div class="results-header">
-      <h2>🎉 Your Matches</h2>
-      <p>These are real programs you likely qualify for.</p>
-      <div class="results-count" id="matchCount">0 matches found</div>
-    </div>
-    <div id="resultsList"></div>
-    <div class="mt-4" style="text-align:center">
-      <button class="btn btn-secondary" onclick="restart()">← Start over</button>
-    </div>
+  <div class="divider"></div>
+  <label class="field-label" data-i18n="s2field">Field of study</label>
+  <select id="field">
+    <option value="" data-i18n="field_sel">— Select your field —</option>
+    <option value="stem">STEM — Science, Tech, Engineering, Math</option>
+    <option value="health">Health / Nursing / Medicine</option>
+    <option value="education">Education / Teaching</option>
+    <option value="arts">Arts / Humanities / Social Science</option>
+    <option value="business">Business / Economics</option>
+    <option value="law">Law / Political Science</option>
+    <option value="other">Other / Undecided</option>
+  </select>
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="btn2b" data-i18n="back">← Back</button>
+    <button class="btn btn-primary" id="btn2n" data-i18n="continue">Continue →</button>
   </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-card hidden" id="step3">
+  <div class="step-eyebrow" data-i18n="s3eye">Step 3 of 4</div>
+  <div class="step-title" data-i18n="s3title">Your finances</div>
+  <div class="step-sub" data-i18n="s3sub">We never store or share this. It unlocks need-based matches.</div>
+  <label class="field-label" data-i18n="s3income">Family income per year (USD)</label>
+  <span class="field-hint" data-i18n="s3income_hint">Approximate is fine.</span>
+  <div class="chips">
+    <label class="chip"><input type="radio" name="income" value="0"> Under $30k</label>
+    <label class="chip"><input type="radio" name="income" value="1"> $30k – $60k</label>
+    <label class="chip"><input type="radio" name="income" value="2"> $60k – $100k</label>
+    <label class="chip"><input type="radio" name="income" value="3"> Over $100k</label>
+    <label class="chip"><input type="radio" name="income" value="skip" data-i18n="prefer_not"> Prefer not to say</label>
+  </div>
+  <div class="divider"></div>
+  <label class="field-label" data-i18n="s3fafsa">Have you filed a FAFSA this year?</label>
+  <span class="field-hint" data-i18n="s3fafsa_hint">FAFSA is a free US government form. F-1 / J-1 students cannot use it.</span>
+  <div class="chips">
+    <label class="chip"><input type="radio" name="fafsa" value="yes" data-i18n="fafsa_yes"> Yes, filed it</label>
+    <label class="chip"><input type="radio" name="fafsa" value="no" data-i18n="fafsa_no"> No, not yet</label>
+    <label class="chip"><input type="radio" name="fafsa" value="cant" data-i18n="fafsa_cant"> Can't — F-1/J-1</label>
+    <label class="chip"><input type="radio" name="fafsa" value="unsure" data-i18n="fafsa_unsure"> Not sure</label>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="btn3b" data-i18n="back">← Back</button>
+    <button class="btn btn-primary" id="btn3n" data-i18n="continue">Continue →</button>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step-card hidden" id="step4">
+  <div class="step-eyebrow" data-i18n="s4eye">Step 4 of 4</div>
+  <div class="step-title" data-i18n="s4title">Your background</div>
+  <div class="step-sub" data-i18n="s4sub">Many programs target specific groups. More checks = more matches.</div>
+  <div class="checks">
+    <label class="check"><input type="checkbox" name="bg" value="minority"/><div class="check-text"><strong>Underrepresented minority</strong><small>Black, Hispanic/Latino, Native American, Pacific Islander</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="woman"/><div class="check-text"><strong>Woman or non-binary</strong><small>Many STEM scholarships target gender diversity</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="disability"/><div class="check-text"><strong>Has a disability</strong><small>Physical, learning, or mental health condition</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="veteran"/><div class="check-text"><strong>Veteran or military family</strong><small>Active duty, reserves, or dependent of a veteran</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="foster"/><div class="check-text"><strong>Foster care or aging out</strong><small>Were or are in the foster care system</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="dreamer"/><div class="check-text"><strong>Dreamer / immigrant student</strong><small>Came to the US before age 16 as an immigrant</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="lgbtq"/><div class="check-text"><strong>LGBTQ+</strong><small>Dedicated scholarships and support programs exist</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="parent"/><div class="check-text"><strong>Student parent</strong><small>You are a parent or caregiver while enrolled</small></div></label>
+    <label class="check"><input type="checkbox" name="bg" value="rural"/><div class="check-text"><strong>From a rural area</strong><small>Some aid specifically targets rural students</small></div></label>
+  </div>
+  <div class="btn-row" style="margin-top:24px">
+    <button class="btn btn-ghost" id="btn4b" data-i18n="back">← Back</button>
+    <button class="btn btn-primary" id="btn4f" data-i18n="find_btn">Find my benefits →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="hidden" id="results">
+  <div class="results-header">
+    <div class="results-eyebrow" data-i18n="res_eyebrow">Your personalized matches</div>
+    <h2 data-i18n="res_title">Here's what you qualify for</h2>
+    <p data-i18n="res_sub">Real programs with step-by-step instructions to claim each one.</p>
+    <div class="results-count" id="matchCount">0 benefits found</div>
+  </div>
+  <div class="cat-nav" id="catTabs"></div>
+  <div id="resultsList"></div>
+  <div class="mt-6 center"><button class="btn btn-ghost" id="btnRestart" data-i18n="restart">← Start over</button></div>
+</div>
 
 </div>
 
-<script>
-// ===== DATA: all scholarships/aid programs =====
-const programs = [
-  {
-    id: "pell",
-    name: "Federal Pell Grant",
-    amount: "Up to $7,395/year",
-    type: "Federal Grant",
-    visas: ["citizen","permanent_resident","daca"],
-    minGpa: 0,
-    levels: ["undergrad","community","vocational"],
-    needBased: true,
-    fields: [],
-    backgrounds: [],
-    url: "https://studentaid.gov/understand-aid/types/grants/pell",
-    steps: [
-      "Go to studentaid.gov and click 'Start FAFSA'.",
-      "Create or log in to your FSA ID account.",
-      "Fill out the FAFSA form — it takes about 30 minutes.",
-      "Submit. Your school's financial aid office gets the result.",
-      "Check your school's student portal — your aid offer shows up there.",
-      "Accept the grant in your portal before the deadline."
-    ],
-    deadline: "FAFSA opens Oct 1 each year. Apply ASAP — money runs out.",
-    note: "This is FREE money — you do NOT pay it back."
-  },
-  {
-    id: "seog",
-    name: "Federal SEOG Grant",
-    amount: "Up to $1,000/year",
-    type: "Federal Grant",
-    visas: ["citizen","permanent_resident","daca"],
-    minGpa: 0,
-    levels: ["undergrad","community"],
-    needBased: true,
-    fields: [],
-    backgrounds: [],
-    url: "https://studentaid.gov/understand-aid/types/grants/seog",
-    steps: [
-      "Complete the FAFSA (same form as Pell Grant).",
-      "Your school automatically considers you if you have extreme financial need.",
-      "Ask your financial aid office: 'Am I eligible for SEOG?' if you don't see it.",
-      "Accept the award in your student portal."
-    ],
-    deadline: "First-come, first-served at each school — apply to FAFSA early.",
-    note: "Not every school has this. It's given to students with the most need."
-  },
-  {
-    id: "workstudy",
-    name: "Federal Work-Study",
-    amount: "Up to $3,000/year (part-time job)",
-    type: "Work Program",
-    visas: ["citizen","permanent_resident","daca"],
-    minGpa: 0,
-    levels: ["undergrad","grad","community","vocational"],
-    needBased: true,
-    fields: [],
-    backgrounds: [],
-    url: "https://studentaid.gov/understand-aid/types/work-study",
-    steps: [
-      "Complete the FAFSA and check 'yes' for work-study.",
-      "Your financial aid offer will say if you qualify.",
-      "Go to your school's student employment office.",
-      "Pick a work-study job from their list — many are on campus.",
-      "You work part-time (10–20 hrs/week) and get paid hourly."
-    ],
-    deadline: "Apply for FAFSA early — work-study spots are limited.",
-    note: "You earn the money by working. It's a job, not a handout — but it counts as aid."
-  },
-  {
-    id: "teachers",
-    name: "TEACH Grant",
-    amount: "Up to $4,000/year",
-    type: "Federal Grant",
-    visas: ["citizen","permanent_resident"],
-    minGpa: 3.25,
-    levels: ["undergrad","grad"],
-    needBased: false,
-    fields: ["education"],
-    backgrounds: [],
-    url: "https://studentaid.gov/understand-aid/types/grants/teach",
-    steps: [
-      "Confirm you are studying to become a teacher in a high-need field.",
-      "Complete FAFSA.",
-      "Contact your school's financial aid office and say 'I want to apply for TEACH Grant'.",
-      "Sign a TEACH Grant Agreement to Serve (you agree to teach 4 years in a high-need school).",
-      "Complete TEACH Grant counseling at studentaid.gov — takes 30 minutes."
-    ],
-    deadline: "Rolling — ask your school each semester.",
-    note: "⚠️ If you don't teach for 4 years after graduating, the grant converts to a loan with interest."
-  },
-  {
-    id: "gates",
-    name: "Gates Scholarship",
-    amount: "Full cost of attendance",
-    type: "Private Scholarship",
-    visas: ["citizen","permanent_resident"],
-    minGpa: 3.3,
-    levels: ["undergrad"],
-    needBased: true,
-    fields: [],
-    backgrounds: ["minority"],
-    url: "https://www.thegatesscholarship.org",
-    steps: [
-      "Check you are a Pell Grant-eligible, minority high school senior or incoming freshman.",
-      "Go to thegatesscholarship.org and create an account by August 1.",
-      "Fill out the scholarship application — it asks about your leadership, community work, and goals.",
-      "Request 2 recommendation letters (from teachers or mentors).",
-      "Submit your FAFSA as well — they use it to verify need.",
-      "Wait for results by late March. If chosen, full tuition is covered."
-    ],
-    deadline: "September 15 each year for high school seniors.",
-    note: "One of the most prestigious and fully funded scholarships in the US."
-  },
-  {
-    id: "dream",
-    name: "TheDream.US Scholarship",
-    amount: "Up to $17,500 (2 yr) or $33,000 (4 yr)",
-    type: "Private Scholarship",
-    visas: ["daca","undocumented"],
-    minGpa: 2.5,
-    levels: ["undergrad","community"],
-    needBased: true,
-    fields: [],
-    backgrounds: ["dreamer"],
-    url: "https://www.thedream.us",
-    steps: [
-      "Check you arrived in the US before age 16 and before Nov 1, 2021.",
-      "Create an account at thedream.us.",
-      "Choose one of their partner colleges — the scholarship is only usable there.",
-      "Complete the application: short essays + financial info.",
-      "Submit by the February deadline.",
-      "If accepted, enroll at the partner college and the money goes directly to tuition."
-    ],
-    deadline: "Usually February each year.",
-    note: "Designed specifically for Dreamers and undocumented students."
-  },
-  {
-    id: "hispanic",
-    name: "Hispanic Scholarship Fund",
-    amount: "$500 – $5,000/year",
-    type: "Private Scholarship",
-    visas: ["citizen","permanent_resident","daca","undocumented","f1","j1","other_nonimmigrant"],
-    minGpa: 3.0,
-    levels: ["undergrad","grad"],
-    needBased: true,
-    fields: [],
-    backgrounds: ["minority"],
-    url: "https://www.hsf.net/scholarship",
-    steps: [
-      "Go to hsf.net and create a free account.",
-      "Fill out the scholarship application — takes about 1 hour.",
-      "Upload your transcript and proof of Hispanic/Latino heritage.",
-      "Write the required personal statement (about 500 words).",
-      "Submit FAFSA (if eligible) or document financial need another way.",
-      "Submit before the February 15 deadline.",
-      "Check your email in April for results."
-    ],
-    deadline: "February 15 each year.",
-    note: "One of the largest Hispanic scholarship programs in the US. Open to any Hispanic student regardless of visa."
-  },
-  {
-    id: "uncf",
-    name: "UNCF Scholarships",
-    amount: "$3,000 – $10,000/year",
-    type: "Private Scholarship",
-    visas: ["citizen","permanent_resident"],
-    minGpa: 2.5,
-    levels: ["undergrad"],
-    needBased: true,
-    fields: [],
-    backgrounds: ["minority"],
-    url: "https://uncf.org/scholarships",
-    steps: [
-      "Go to uncf.org and create a profile.",
-      "The system will match you automatically to scholarships in their database.",
-      "Complete the matched applications — each has its own short essay.",
-      "Upload transcript and proof of enrollment.",
-      "Hit submit before each scholarship's deadline (they vary).",
-      "Check your UNCF portal in May–June for awards."
-    ],
-    deadline: "Varies by scholarship — check portal regularly.",
-    note: "UNCF manages 400+ scholarships for Black students. One application, many matches."
-  },
-  {
-    id: "nsf_grfp",
-    name: "NSF Graduate Research Fellowship",
-    amount: "$37,000/year + tuition",
-    type: "Federal Fellowship",
-    visas: ["citizen","permanent_resident"],
-    minGpa: 0,
-    levels: ["grad","phd"],
-    needBased: false,
-    fields: ["stem"],
-    backgrounds: [],
-    url: "https://www.nsfgrfp.org",
-    steps: [
-      "Check you are in your first or second year of a STEM graduate program.",
-      "Create an account at nsfgrfp.org.",
-      "Write 3 essays: personal statement, past research, and proposed future research.",
-      "Request 3 recommendation letters from professors or research mentors.",
-      "Submit your application in mid-October.",
-      "Results come out in April. If awarded, funding starts the following fall."
-    ],
-    deadline: "Mid-October (varies by field — check nsfgrfp.org).",
-    note: "The most prestigious STEM fellowship in the US. Covers 3 years of grad school."
-  },
-  {
-    id: "rotc",
-    name: "Military ROTC Scholarship",
-    amount: "Full tuition + stipend",
-    type: "Military Scholarship",
-    visas: ["citizen"],
-    minGpa: 2.5,
-    levels: ["undergrad"],
-    needBased: false,
-    fields: [],
-    backgrounds: ["veteran"],
-    url: "https://www.goarmy.com/rotc/scholarships.html",
-    steps: [
-      "Be a US citizen under 31 years old.",
-      "Go to goarmy.com/rotc and fill out the scholarship interest form.",
-      "Take the APFT (Army Physical Fitness Test).",
-      "Interview with an ROTC recruiter on campus.",
-      "If accepted, you commit to 8 years in the Army (4 active, 4 reserve).",
-      "Your tuition, fees, and a monthly stipend are all paid."
-    ],
-    deadline: "February 4 for the following fall semester.",
-    note: "You serve in the military after graduation. Make sure this is right for you."
-  },
-  {
-    id: "vabenefit",
-    name: "GI Bill® (VA Education Benefits)",
-    amount: "Full in-state tuition + housing",
-    type: "Veterans Benefit",
-    visas: ["citizen","permanent_resident"],
-    minGpa: 0,
-    levels: ["undergrad","grad","vocational","community"],
-    needBased: false,
-    fields: [],
-    backgrounds: ["veteran"],
-    url: "https://www.va.gov/education/about-gi-bill-benefits/",
-    steps: [
-      "Confirm you served at least 90 days of active duty (Post-9/11 GI Bill).",
-      "Go to va.gov/education and click 'Apply for education benefits'.",
-      "Fill out VA Form 22-1990 online — takes about 30 minutes.",
-      "Get your Certificate of Eligibility (COE) in the mail (2–4 weeks).",
-      "Bring the COE to your school's veteran services office.",
-      "VA pays tuition directly to your school and deposits housing allowance monthly."
-    ],
-    deadline: "No deadline — apply anytime after you separate from service.",
-    note: "If you served in the military, this may cover 100% of your tuition."
-  },
-  {
-    id: "disability_aid",
-    name: "Vocational Rehabilitation Aid",
-    amount: "Varies — covers tuition + living",
-    type: "State/Federal Program",
-    visas: ["citizen","permanent_resident","daca"],
-    minGpa: 0,
-    levels: ["undergrad","grad","vocational","community"],
-    needBased: false,
-    fields: [],
-    backgrounds: ["disability"],
-    url: "https://rsa.ed.gov/about/programs/vocational-rehabilitation-state-grants",
-    steps: [
-      "Find your state's Vocational Rehabilitation (VR) agency at rsa.ed.gov.",
-      "Call or email your state VR office to request an intake appointment.",
-      "Attend the appointment and bring proof of your disability (doctor's note or diagnosis).",
-      "Work with your VR counselor to make an Individualized Plan for Employment (IPE).",
-      "Once approved, VR can pay tuition, books, tools, and sometimes living expenses.",
-      "Check in with your counselor each semester to stay enrolled."
-    ],
-    deadline: "Rolling — apply as soon as possible, waitlists exist in some states.",
-    note: "This is one of the most overlooked programs. If you have a disability, call your state VR office today."
-  },
-  {
-    id: "foster",
-    name: "Education and Training Vouchers (ETV)",
-    amount: "Up to $5,000/year",
-    type: "Federal Voucher",
-    visas: ["citizen","permanent_resident"],
-    minGpa: 0,
-    levels: ["undergrad","vocational","community"],
-    needBased: false,
-    fields: [],
-    backgrounds: ["foster"],
-    url: "https://www.childwelfare.gov/topics/systemwide/youth/foster-care/",
-    steps: [
-      "Confirm you were in foster care on or after your 16th birthday OR aged out of the system.",
-      "Contact your state's child welfare agency (search '[your state] ETV scholarship foster care').",
-      "Fill out the state application — it asks for your foster care history.",
-      "If approved, the voucher is sent to your school to cover tuition, housing, or books.",
-      "Reapply each year before you turn 26."
-    ],
-    deadline: "Varies by state — apply before the academic year starts.",
-    note: "Each state runs this differently. Call your state child welfare office for exact steps."
-  },
-  {
-    id: "scholarships_women_stem",
-    name: "Society of Women Engineers Scholarship",
-    amount: "$1,000 – $15,000/year",
-    type: "Private Scholarship",
-    visas: ["citizen","permanent_resident","f1","j1"],
-    minGpa: 3.0,
-    levels: ["undergrad","grad"],
-    needBased: false,
-    fields: ["stem"],
-    backgrounds: ["woman"],
-    url: "https://scholarships.swe.org",
-    steps: [
-      "Confirm you identify as a woman and are in a STEM degree program.",
-      "Go to scholarships.swe.org and create an account.",
-      "Browse the list of scholarships and apply to every one you qualify for.",
-      "Each application asks for 2 essays and a transcript.",
-      "Get one recommendation letter from a professor.",
-      "Submit by February 15.",
-      "Awards are announced in May."
-    ],
-    deadline: "February 15 each year.",
-    note: "SWE runs 200+ scholarships. One account, multiple applications."
-  },
-  {
-    id: "lgbtq_pride",
-    name: "Point Foundation LGBTQ Scholarship",
-    amount: "Up to full tuition",
-    type: "Private Scholarship",
-    visas: ["citizen","permanent_resident","f1"],
-    minGpa: 3.0,
-    levels: ["undergrad","grad"],
-    needBased: true,
-    fields: [],
-    backgrounds: ["lgbtq"],
-    url: "https://www.pointfoundation.org/point-apply/apply-for-scholarship/",
-    steps: [
-      "Go to pointfoundation.org and read the eligibility requirements.",
-      "Create an account and start the online application.",
-      "Write essays about your LGBTQ+ identity, academic goals, and community impact.",
-      "Request 2 recommendation letters.",
-      "Submit your application by late January.",
-      "Finalists are interviewed by phone in March.",
-      "Awards are announced in May."
-    ],
-    deadline: "Late January each year.",
-    note: "This scholarship is specifically for LGBTQ+ students who have faced financial hardship due to their identity."
-  },
-  {
-    id: "intl_university",
-    name: "University Merit Scholarships (International)",
-    amount: "$5,000 – Full tuition",
-    type: "Institutional Aid",
-    visas: ["f1","j1","other_nonimmigrant"],
-    minGpa: 3.5,
-    levels: ["undergrad","grad","phd"],
-    needBased: false,
-    fields: [],
-    backgrounds: [],
-    url: "https://international.collegeboard.org",
-    steps: [
-      "List all the US universities you are applying to or attending.",
-      "Go to each university's international admissions page and search for 'scholarships for international students'.",
-      "Collect all application requirements (most ask for essays + transcript).",
-      "Submit each scholarship application before the deadline (often same as admissions).",
-      "If admitted, ask your admissions counselor: 'Is there any merit aid I was not offered?'",
-      "Accept the best offer."
-    ],
-    deadline: "Varies by school — usually Nov 1 (Early Decision) or Jan 1 (Regular).",
-    note: "Over 800 US universities offer merit aid to international students. Your GPA is your key lever."
-  },
-  {
-    id: "fulbright",
-    name: "Fulbright Foreign Student Program",
-    amount: "Full tuition + living + travel",
-    type: "Government Scholarship",
-    visas: ["f1","j1","other_nonimmigrant"],
-    minGpa: 3.5,
-    levels: ["grad","phd"],
-    needBased: false,
-    fields: [],
-    backgrounds: [],
-    url: "https://foreign.fulbrightonline.org",
-    steps: [
-      "Check if your country has a US Embassy Fulbright Commission at foreign.fulbrightonline.org.",
-      "Apply in YOUR HOME COUNTRY through your country's Fulbright commission — NOT from the US.",
-      "Gather documents: transcript, 3 recommendation letters, project proposal.",
-      "Submit your application by your country's local deadline (varies by country).",
-      "If selected, you receive a J-1 visa to study at a US university.",
-      "The scholarship covers tuition, living, health insurance, and travel."
-    ],
-    deadline: "Varies by country — usually February–June of the year before you want to start.",
-    note: "You must apply from your home country. This is the most prestigious government scholarship."
-  }
-];
-
-// ===== STATE =====
-let step = 1;
-
-function getVal(name) {
-  const el = document.querySelector(`[name="${name}"]:checked`);
-  return el ? el.value : null;
-}
-function getCheckboxes(name) {
-  return [...document.querySelectorAll(`[name="${name}"]:checked`)].map(e => e.value);
-}
-function updateGpa(val) {
-  document.getElementById('gpaDisplay').textContent = parseFloat(val).toFixed(1) + ' / 4.0';
-}
-
-function goStep(n) {
-  document.getElementById('step' + step).classList.add('hidden');
-  step = n;
-  document.getElementById('step' + n).classList.remove('hidden');
-  updateProgress(n);
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-function updateProgress(n) {
-  const pct = Math.round((n / 4) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = 'Step ' + n + ' of 4';
-  document.getElementById('progressPct').textContent = pct + '%';
-}
-
-function findScholarships() {
-  // collect inputs
-  const visa = getVal('visa') || '';
-  const firstgen = getVal('firstgen') || '';
-  const level = getVal('level') || '';
-  const gpa = parseFloat(document.getElementById('gpaRange').value);
-  const field = document.getElementById('field').value || '';
-  const income = getVal('income') || '';
-  const fafsa = getVal('fafsa') || '';
-  const backgrounds = getCheckboxes('bg');
-  const fafsaNo = fafsa === 'no' || fafsa === 'unsure';
-
-  const matches = programs.filter(p => {
-    // visa check
-    if (!p.visas.includes(visa)) return false;
-    // level check
-    if (p.levels.length && !p.levels.includes(level)) return false;
-    // gpa check
-    if (gpa > 0 && gpa < p.minGpa) return false;
-    // field check
-    if (p.fields.length && !p.fields.includes(field)) return false;
-    // background check
-    if (p.backgrounds.length && !p.backgrounds.some(b => backgrounds.includes(b))) return false;
-    // need-based: skip if income > 100k declared AND no firstgen
-    if (p.needBased && income === '3' && firstgen === 'no') return false;
-    return true;
-  });
-
-  renderResults(matches, visa, fafsaNo);
-}
-
-function renderResults(matches, visa, fafsaNo) {
-  // hide all steps
-  for (let i = 1; i <= 4; i++) document.getElementById('step' + i).classList.add('hidden');
-  document.getElementById('progressWrap').classList.add('hidden');
-  document.getElementById('results').classList.remove('hidden');
-  document.getElementById('matchCount').textContent = matches.length + ' match' + (matches.length !== 1 ? 'es' : '') + ' found';
-
-  const list = document.getElementById('resultsList');
-  list.innerHTML = '';
-
-  if (matches.length === 0) {
-    list.innerHTML = `
-      <div class="no-results">
-        <div class="no-results-emoji">😕</div>
-        <h3>No exact matches found</h3>
-        <p>Try changing your GPA or field of study. Or contact your school's financial aid office — they know programs specific to your school.</p>
-      </div>`;
-    return;
-  }
-
-  // FAFSA reminder for eligible non-filers
-  const fafsaEligible = ['citizen','permanent_resident','daca'].includes(
-    document.querySelector('[name="visa"]:checked')?.value
-  );
-  if (fafsaEligible && fafsaNo) {
-    list.innerHTML = `
-      <div class="result-card" style="border-color:var(--warn)">
-        <div class="result-header">
-          <div>
-            <div class="result-title">⚠️ You haven't done your FAFSA yet</div>
-            <div style="font-size:14px;color:var(--muted);margin-top:4px">Most of your matches need it. Do it first — it's free.</div>
-          </div>
-        </div>
-        <div class="result-steps">
-          <div class="step-list">
-            <div class="step-item"><span class="step-num">1</span><span class="step-text">Go to <a href="https://studentaid.gov" target="_blank" rel="noopener noreferrer">studentaid.gov</a> and create a free FSA ID.</span></div>
-            <div class="step-item"><span class="step-num">2</span><span class="step-text">Log in and click "Start FAFSA" for the current year.</span></div>
-            <div class="step-item"><span class="step-num">3</span><span class="step-text">Fill it out (about 30 min). It's free — never pay anyone to help you.</span></div>
-            <div class="step-item"><span class="step-num">4</span><span class="step-text">Submit. Your school gets the results and builds your aid offer.</span></div>
-          </div>
-        </div>
-      </div>`;
-  }
-
-  matches.forEach(p => {
-    const stepsHtml = p.steps.map((s, i) =>
-      `<div class="step-item"><span class="step-num">${i+1}</span><span class="step-text">${s}</span></div>`
-    ).join('');
-
-    list.innerHTML += `
-      <div class="result-card">
-        <div class="result-header">
-          <div>
-            <div class="result-title">${p.name}</div>
-            <div class="badges">
-              <span class="badge badge-type">${p.type}</span>
-              ${p.needBased ? '<span class="badge badge-visa">Need-based</span>' : '<span class="badge badge-match">Merit-based</span>'}
-              ${p.minGpa > 0 ? `<span class="badge badge-visa">Min GPA ${p.minGpa}</span>` : ''}
-            </div>
-          </div>
-          <div class="result-amount">${p.amount}</div>
-        </div>
-        <div class="result-steps">
-          <div class="steps-label">📋 EXACTLY WHAT TO DO</div>
-          <div class="step-list">${stepsHtml}</div>
-          <div class="deadline-warn">⏰ Deadline: ${p.deadline}</div>
-          ${p.note ? `<div style="margin-top:10px;font-size:13px;padding:8px 12px;background:var(--info-subtle);border-radius:8px;color:var(--info)">💡 ${p.note}</div>` : ''}
-          <div class="mt-2">
-            <a href="${p.url}" target="_blank" rel="noopener noreferrer"
-               style="color:var(--accent);font-size:13px;font-weight:600">
-              → Apply at official website
-            </a>
-          </div>
-        </div>
-      </div>`;
-  });
-}
-
-function restart() {
-  step = 1;
-  document.getElementById('results').classList.add('hidden');
-  document.getElementById('progressWrap').classList.remove('hidden');
-  document.getElementById('step1').classList.remove('hidden');
-  updateProgress(1);
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-</script>
+<!-- CHATBOT -->
+<button class="chat-bubble" id="chatBubble" title="Ask a question">💬</button>
+<div class="chat-panel hidden" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-header-icon">🤖</div>
+    <div class="chat-header-text">
+      <strong data-i18n="chat_title">StudentBoost Assistant</strong>
+      <small data-i18n="chat_status">● Online — ask anything</small>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSugs"></div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Ask a question..." data-i18n-placeholder="chat_placeholder"/>
+    <button class="chat-send" id="chatSend">→</button>
+  </div>
+</div>
 
 <script>
 (function(){
 'use strict';
 
-// ── TRANSLATIONS ──
-var T = {
-  en:{badge:'Free & Private Student Benefits Finder',h1:'Find every benefit<br/>you're missing out on',sub:'Answer 4 quick questions. We match you to scholarships, housing aid, food programs, health insurance, and more.',s1ey:'Step 1 of 4',s1ti:'Who are you?',s1su:'This determines which programs you're legally eligible for.',s2ey:'Step 2 of 4',s2ti:'Your studies',s2su:'Program type and academic standing affect eligibility.',s3ey:'Step 3 of 4',s3ti:'Your finances',s3su:'We never store or share this. It unlocks need-based matches.',s4ey:'Step 4 of 4',s4ti:'Your background',s4su:'Many programs target specific groups. More checks = more matches.',rEy:'Your personalized matches',rH2:'Here's what you qualify for',rSub:'Real programs with step-by-step instructions to claim each one.',chat:'Ask me anything',inp:'Type a question...',chatName:'StudentBoost Assistant',chatSt:'Online — ask me anything'},
-  es:{badge:'Buscador Gratuito de Beneficios Estudiantiles',h1:'Encuentra cada beneficio<br/>que te estás perdiendo',sub:'Responde 4 preguntas rápidas. Te emparejamos con becas, ayuda para vivienda, programas de comida, seguro médico y más.',s1ey:'Paso 1 de 4',s1ti:'¿Quién eres?',s1su:'Esto determina qué programas son legalmente accesibles para ti.',s2ey:'Paso 2 de 4',s2ti:'Tus estudios',s2su:'El tipo de programa y el rendimiento académico afectan la elegibilidad.',s3ey:'Paso 3 de 4',s3ti:'Tus finanzas',s3su:'Nunca almacenamos ni compartimos esto. Desbloquea ayudas basadas en necesidad.',s4ey:'Paso 4 de 4',s4ti:'Tu contexto',s4su:'Muchos programas se dirigen a grupos específicos. Más marcas = más resultados.',rEy:'Tus resultados personalizados',rH2:'Esto es para lo que calificas',rSub:'Programas reales con instrucciones paso a paso para reclamarlos.',chat:'Pregúntame lo que quieras',inp:'Escribe tu pregunta...',chatName:'Asistente StudentBoost',chatSt:'En línea — pregúntame lo que quieras'},
-  fr:{badge:'Recherche Gratuite d'Aides Étudiantes',h1:'Trouvez chaque aide<br/>que vous manquez',sub:'Répondez à 4 questions rapides. Nous vous associons à des bourses, aides au logement, programmes alimentaires, assurance santé et plus.',s1ey:'Étape 1 sur 4',s1ti:'Qui êtes-vous ?',s1su:'Cela détermine quels programmes vous êtes légalement éligible.',s2ey:'Étape 2 sur 4',s2ti:'Vos études',s2su:'Le type de programme et les résultats académiques influencent l'éligibilité.',s3ey:'Étape 3 sur 4',s3ti:'Vos finances',s3su:'Nous ne stockons ni ne partageons ces informations. Elles débloquent des aides selon les besoins.',s4ey:'Étape 4 sur 4',s4ti:'Votre parcours',s4su:'Beaucoup de programmes ciblent des groupes spécifiques. Plus de cases = plus de résultats.',rEy:'Vos correspondances personnalisées',rH2:'Voici ce pour quoi vous êtes éligible',rSub:'Programmes réels avec instructions étape par étape pour chaque demande.',chat:'Posez-moi n'importe quelle question',inp:'Tapez votre question...',chatName:'Assistant StudentBoost',chatSt:'En ligne — posez-moi vos questions'},
-  de:{badge:'Kostenloser Studentenförderungs-Finder',h1:'Entdecke jede Förderung<br/>die du verpasst',sub:'Beantworte 4 Fragen. Wir finden Stipendien, Wohnhilfen, Lebensmittelprogramme, Krankenversicherung und mehr für dich.',s1ey:'Schritt 1 von 4',s1ti:'Wer bist du?',s1su:'Das bestimmt, welche Programme du rechtlich beantragen kannst.',s2ey:'Schritt 2 von 4',s2ti:'Dein Studium',s2su:'Studiengang und akademischer Stand beeinflussen die Berechtigung.',s3ey:'Schritt 3 von 4',s3ti:'Deine Finanzen',s3su:'Diese Angaben werden nie gespeichert. Sie schalten bedarfsbasierte Förderungen frei.',s4ey:'Schritt 4 von 4',s4ti:'Dein Hintergrund',s4su:'Viele Programme richten sich an bestimmte Gruppen. Mehr Häkchen = mehr Ergebnisse.',rEy:'Deine personalisierten Treffer',rH2:'Das erfüllst du',rSub:'Echte Programme mit Schritt-für-Schritt-Anleitungen für jeden Antrag.',chat:'Stell mir jede Frage',inp:'Frage eingeben...',chatName:'StudentBoost Assistent',chatSt:'Online — stell mir jede Frage'},
-  zh:{badge:'免费学生福利搜索',h1:'发现您错过的<br/>每一项福利',sub:'回答4个快速问题。我们为您匹配奖学金、住房援助、食品项目、健康保险等。',s1ey:'第 1 步，共 4 步',s1ti:'您是谁？',s1su:'这决定了您在法律上有资格申请哪些项目。',s2ey:'第 2 步，共 4 步',s2ti:'您的学业',s2su:'专业类型和学业成绩影响资格。',s3ey:'第 3 步，共 4 步',s3ti:'您的财务状况',s3su:'我们从不存储或共享这些信息。它解锁基于需求的匹配。',s4ey:'第 4 步，共 4 步',s4ti:'您的背景',s4su:'许多项目针对特定群体。勾选越多 = 匹配越多。',rEy:'您的个性化匹配',rH2:'这是您符合条件的福利',rSub:'真实项目，附有逐步申请说明。',chat:'有任何问题都可以问我',inp:'输入问题...',chatName:'StudentBoost 助手',chatSt:'在线 — 随时提问'},
-  ar:{badge:'محرك البحث المجاني للمزايا الطلابية',h1:'اكتشف كل ميزة<br/>تفوتك',sub:'أجب على 4 أسئلة سريعة. نوافقك مع المنح الدراسية ومساعدة الإسكان وبرامج الغذاء والتأمين الصحي والمزيد.',s1ey:'الخطوة 1 من 4',s1ti:'من أنت؟',s1su:'هذا يحدد البرامج التي يحق لك الاستفادة منها قانونيًا.',s2ey:'الخطوة 2 من 4',s2ti:'دراستك',s2su:'نوع البرنامج والمستوى الأكاديمي يؤثران على الأهلية.',s3ey:'الخطوة 3 من 4',s3ti:'وضعك المالي',s3su:'لن نخزن هذه المعلومات أو نشاركها. إنها تفتح مطابقات قائمة على الحاجة.',s4ey:'الخطوة 4 من 4',s4ti:'خلفيتك',s4su:'تستهدف العديد من البرامج مجموعات معينة. المزيد من المربعات = المزيد من النتائج.',rEy:'مطابقاتك الشخصية',rH2:'هذا ما تستوفي متطلباته',rSub:'برامج حقيقية مع تعليمات خطوة بخطوة للمطالبة بكل منها.',chat:'اسألني أي شيء',inp:'اكتب سؤالك...',chatName:'مساعد StudentBoost',chatSt:'متصل — اسألني أي شيء'}
-};
-
-var LANG_META = {
-  en:{flag:'🇺🇸',label:'EN'},es:{flag:'🇪🇸',label:'ES'},
-  fr:{flag:'🇫🇷',label:'FR'},de:{flag:'🇩🇪',label:'DE'},
-  zh:{flag:'🇨🇳',label:'ZH'},ar:{flag:'🇸🇦',label:'AR'}
-};
-
-var curLang = 'en';
-
-function applyLang(l) {
-  var t = T[l]; if (!t) return;
-  curLang = l;
-  // hero
-  var badge = document.querySelector('.hero-badge'); if(badge) badge.innerHTML = '&#10022; ' + t.badge;
-  var h1 = document.querySelector('.hero h1'); if(h1) h1.innerHTML = t.h1;
-  var hp = document.querySelector('.hero p'); if(hp) hp.textContent = t.sub;
-  // steps eyebrow/title/sub
-  var ids = ['s1ey','s1ti','s1su','s2ey','s2ti','s2su','s3ey','s3ti','s3su','s4ey','s4ti','s4su','rEy','rSub'];
-  var keys = ['s1ey','s1ti','s1su','s2ey','s2ti','s2su','s3ey','s3ti','s3su','s4ey','s4ti','s4su','rEy','rSub'];
-  ids.forEach(function(id, i){
-    var el = document.getElementById(id);
-    if(el && t[keys[i]]) el.innerHTML = t[keys[i]];
-  });
-  var rh = document.querySelector('.results-header h2'); if(rh) rh.textContent = t.rH2;
-  // chat header
-  var cn = document.getElementById('chatHdrName'); if(cn) cn.textContent = t.chatName;
-  var cs = document.getElementById('chatHdrSt'); if(cs) cs.textContent = t.chatSt;
-  var ci = document.getElementById('chatInp'); if(ci) ci.placeholder = t.inp;
-  // rtl
-  document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';
-  // lang button display
-  var lm = LANG_META[l];
-  document.getElementById('langFlag').textContent = lm.flag;
-  document.getElementById('langLabel').textContent = lm.label;
-  // mark active
-  document.querySelectorAll('.lang-opt').forEach(function(o){
-    o.classList.toggle('active', o.getAttribute('data-l') === l);
-  });
-}
-
-// Assign IDs to translatable elements
-function assignIds(){
-  var stepCards = [
-    {ey:'s1ey',ti:'s1ti',su:'s1su'},
-    {ey:'s2ey',ti:'s2ti',su:'s2su'},
-    {ey:'s3ey',ti:'s3ti',su:'s3su'},
-    {ey:'s4ey',ti:'s4ti',su:'s4su'}
-  ];
-  for(var i=0;i<4;i++){
-    var card = document.getElementById('step'+(i+1));
-    if(!card) continue;
-    var ey=card.querySelector('.step-eyebrow'),ti=card.querySelector('.step-title'),su=card.querySelector('.step-sub');
-    if(ey) ey.id=stepCards[i].ey;
-    if(ti) ti.id=stepCards[i].ti;
-    if(su) su.id=stepCards[i].su;
+/* ───────────────────── I18N ───────────────────── */
+var LANGS={
+  en:{
+    badge:'✦ Free & Private Student Benefits Finder',
+    headline:'Find every benefit<br/>you\'re missing out on',
+    subline:'Answer 4 quick questions. We match you to scholarships, housing aid, food programs, health insurance, and more.',
+    s1eye:'Step 1 of 4',s1title:'Who are you?',s1sub:'This determines which programs you\'re legally eligible for.',
+    s1visa:'Visa / residency status in the US',s1visa_hint:'Not sure? Check your I-94 form or passport visa stamp.',
+    s1fg:'First-generation college student?',s1fg_hint:'Neither parent completed a 4-year college degree.',
+    fg_yes:'Yes, first-gen',fg_no:'No',fg_unsure:'Not sure',
+    continue:'Continue →',back:'← Back',
+    s2eye:'Step 2 of 4',s2title:'Your studies',s2sub:'Program type and academic standing affect eligibility.',
+    s2level:'Level of study',s2gpa:'Current GPA',s2gpa_hint:'Drag the slider. Leave at 0.0 if you don\'t know.',s2field:'Field of study',field_sel:'— Select your field —',
+    s3eye:'Step 3 of 4',s3title:'Your finances',s3sub:'We never store or share this. It unlocks need-based matches.',
+    s3income:'Family income per year (USD)',s3income_hint:'Approximate is fine.',prefer_not:'Prefer not to say',
+    s3fafsa:'Have you filed a FAFSA this year?',s3fafsa_hint:'FAFSA is a free US government form. F-1 / J-1 students cannot use it.',
+    fafsa_yes:'Yes, filed it',fafsa_no:'No, not yet',fafsa_cant:'Can\'t — F-1/J-1',fafsa_unsure:'Not sure',
+    s4eye:'Step 4 of 4',s4title:'Your background',s4sub:'Many programs target specific groups. More checks = more matches.',
+    find_btn:'Find my benefits →',
+    res_eyebrow:'Your personalized matches',res_title:'Here\'s what you qualify for',res_sub:'Real programs with step-by-step instructions to claim each one.',
+    restart:'← Start over',how_to:'How to get it',
+    chat_title:'StudentBoost Assistant',chat_status:'● Online — ask anything',chat_placeholder:'Ask a question...',
+    chat_welcome:'Hi! I can answer questions about scholarships, FAFSA, visa eligibility, housing aid, food programs, and more. What do you want to know?'
+  },
+  es:{
+    badge:'✦ Buscador Gratuito de Beneficios Estudiantiles',
+    headline:'Encuentra cada beneficio<br/>que te estás perdiendo',
+    subline:'Responde 4 preguntas. Te emparejamos con becas, ayuda de vivienda, programas de alimentos, seguro médico y más.',
+    s1eye:'Paso 1 de 4',s1title:'¿Quién eres?',s1sub:'Esto determina para qué programas eres legalmente elegible.',
+    s1visa:'Estado migratorio en EE.UU.',s1visa_hint:'¿No estás seguro? Revisa tu formulario I-94 o el sello de visa.',
+    s1fg:'¿Eres el primero en tu familia en ir a la universidad?',s1fg_hint:'Ninguno de tus padres terminó una carrera universitaria.',
+    fg_yes:'Sí, primera generación',fg_no:'No',fg_unsure:'No estoy seguro/a',
+    continue:'Continuar →',back:'← Atrás',
+    s2eye:'Paso 2 de 4',s2title:'Tus estudios',s2sub:'El tipo de programa y tu historial académico afectan la elegibilidad.',
+    s2level:'Nivel de estudios',s2gpa:'GPA actual',s2gpa_hint:'Mueve el control deslizante. Déjalo en 0.0 si no sabes.',s2field:'Campo de estudio',field_sel:'— Selecciona tu campo —',
+    s3eye:'Paso 3 de 4',s3title:'Tus finanzas',s3sub:'Nunca guardamos ni compartimos esto. Desbloquea ayudas por necesidad.',
+    s3income:'Ingresos familiares anuales (USD)',s3income_hint:'Un aproximado está bien.',prefer_not:'Prefiero no decirlo',
+    s3fafsa:'¿Has presentado el FAFSA este año?',s3fafsa_hint:'El FAFSA es un formulario gratuito del gobierno de EE.UU. Los estudiantes F-1/J-1 no pueden usarlo.',
+    fafsa_yes:'Sí, ya lo presenté',fafsa_no:'No, todavía no',fafsa_cant:'No puedo — F-1/J-1',fafsa_unsure:'No estoy seguro/a',
+    s4eye:'Paso 4 de 4',s4title:'Tu perfil',s4sub:'Muchos programas están dirigidos a grupos específicos. Más selecciones = más resultados.',
+    find_btn:'Encontrar mis beneficios →',
+    res_eyebrow:'Tus coincidencias personalizadas',res_title:'Esto es para lo que calificas',res_sub:'Programas reales con instrucciones paso a paso.',
+    restart:'← Empezar de nuevo',how_to:'Cómo obtenerlo',
+    chat_title:'Asistente StudentBoost',chat_status:'● En línea — pregunta lo que quieras',chat_placeholder:'Haz una pregunta...',
+    chat_welcome:'¡Hola! Puedo responder preguntas sobre becas, FAFSA, elegibilidad por visa, ayuda de vivienda, programas de alimentos y más. ¿Qué quieres saber?'
+  },
+  fr:{
+    badge:'✦ Outil Gratuit de Recherche d\'Aides Étudiantes',
+    headline:'Trouvez chaque aide<br/>que vous manquez',
+    subline:'Répondez à 4 questions. Nous vous correspondons aux bourses, aides au logement, programmes alimentaires, assurance santé et plus.',
+    s1eye:'Étape 1 sur 4',s1title:'Qui êtes-vous?',s1sub:'Cela détermine les programmes pour lesquels vous êtes légalement éligible.',
+    s1visa:'Statut de visa / résidence aux États-Unis',s1visa_hint:'Pas sûr? Consultez votre formulaire I-94 ou le cachet de visa.',
+    s1fg:'Êtes-vous le premier de votre famille à aller à l\'université?',s1fg_hint:'Aucun de vos parents n\'a terminé un diplôme universitaire de 4 ans.',
+    fg_yes:'Oui, première génération',fg_no:'Non',fg_unsure:'Pas sûr(e)',
+    continue:'Continuer →',back:'← Retour',
+    s2eye:'Étape 2 sur 4',s2title:'Vos études',s2sub:'Le type de programme et les résultats académiques influencent l\'éligibilité.',
+    s2level:'Niveau d\'études',s2gpa:'GPA actuel',s2gpa_hint:'Faites glisser le curseur. Laissez à 0.0 si vous ne savez pas.',s2field:'Domaine d\'études',field_sel:'— Sélectionnez votre domaine —',
+    s3eye:'Étape 3 sur 4',s3title:'Vos finances',s3sub:'Nous ne stockons ni ne partageons jamais ces données.',
+    s3income:'Revenu familial annuel (USD)',s3income_hint:'Une approximation suffit.',prefer_not:'Je préfère ne pas dire',
+    s3fafsa:'Avez-vous déposé un FAFSA cette année?',s3fafsa_hint:'Le FAFSA est un formulaire gouvernemental gratuit. Les étudiants F-1/J-1 ne peuvent pas l\'utiliser.',
+    fafsa_yes:'Oui, déposé',fafsa_no:'Non, pas encore',fafsa_cant:'Impossible — F-1/J-1',fafsa_unsure:'Pas sûr(e)',
+    s4eye:'Étape 4 sur 4',s4title:'Votre profil',s4sub:'De nombreux programmes ciblent des groupes spécifiques.',
+    find_btn:'Trouver mes aides →',
+    res_eyebrow:'Vos correspondances personnalisées',res_title:'Voici ce pour quoi vous êtes éligible',res_sub:'Programmes réels avec instructions étape par étape.',
+    restart:'← Recommencer',how_to:'Comment l\'obtenir',
+    chat_title:'Assistant StudentBoost',chat_status:'● En ligne — posez vos questions',chat_placeholder:'Posez une question...',
+    chat_welcome:'Bonjour! Je peux répondre aux questions sur les bourses, le FAFSA, l\'éligibilité selon le visa, les aides au logement et plus. Que voulez-vous savoir?'
+  },
+  de:{
+    badge:'✦ Kostenloser Studentenförderungs-Finder',
+    headline:'Finden Sie jede Förderung<br/>die Sie verpassen',
+    subline:'Beantworten Sie 4 Fragen. Wir finden Stipendien, Wohnhilfen, Lebensmittelprogramme, Krankenversicherung und mehr.',
+    s1eye:'Schritt 1 von 4',s1title:'Wer sind Sie?',s1sub:'Dies bestimmt, für welche Programme Sie legal berechtigt sind.',
+    s1visa:'Visa / Aufenthaltsstatus in den USA',s1visa_hint:'Nicht sicher? Prüfen Sie Ihr I-94-Formular oder den Visumsstempel.',
+    s1fg:'Sind Sie der Erste in Ihrer Familie, der studiert?',s1fg_hint:'Keiner Ihrer Eltern hat einen 4-jährigen Hochschulabschluss.',
+    fg_yes:'Ja, erste Generation',fg_no:'Nein',fg_unsure:'Nicht sicher',
+    continue:'Weiter →',back:'← Zurück',
+    s2eye:'Schritt 2 von 4',s2title:'Ihr Studium',s2sub:'Studiengang und Noten beeinflussen die Berechtigung.',
+    s2level:'Studienstufe',s2gpa:'Aktueller GPA',s2gpa_hint:'Schieberegler bewegen. Bei 0.0 lassen, wenn unbekannt.',s2field:'Studienbereich',field_sel:'— Bereich auswählen —',
+    s3eye:'Schritt 3 von 4',s3title:'Ihre Finanzen',s3sub:'Wir speichern oder teilen diese Daten nie.',
+    s3income:'Familieneinkommen pro Jahr (USD)',s3income_hint:'Eine Schätzung reicht.',prefer_not:'Keine Angabe',
+    s3fafsa:'Haben Sie dieses Jahr einen FAFSA eingereicht?',s3fafsa_hint:'FAFSA ist ein kostenloses US-Regierungsformular. F-1/J-1-Studenten können es nicht nutzen.',
+    fafsa_yes:'Ja, eingereicht',fafsa_no:'Nein, noch nicht',fafsa_cant:'Nicht möglich — F-1/J-1',fafsa_unsure:'Nicht sicher',
+    s4eye:'Schritt 4 von 4',s4title:'Ihr Profil',s4sub:'Viele Programme richten sich an bestimmte Gruppen.',
+    find_btn:'Meine Förderungen finden →',
+    res_eyebrow:'Ihre personalisierten Treffer',res_title:'Dafür qualifizieren Sie sich',res_sub:'Echte Programme mit Schritt-für-Schritt-Anleitungen.',
+    restart:'← Neu starten',how_to:'So erhalten Sie es',
+    chat_title:'StudentBoost Assistent',chat_status:'● Online — fragen Sie alles',chat_placeholder:'Frage stellen...',
+    chat_welcome:'Hallo! Ich beantworte Fragen zu Stipendien, FAFSA, Visa-Berechtigung, Wohnhilfen und mehr. Was möchten Sie wissen?'
+  },
+  zh:{
+    badge:'✦ 免费学生福利查找工具',
+    headline:'找到你错过的<br/>每一项福利',
+    subline:'回答4个问题。我们为您匹配奖学金、住房补贴、食物项目、医疗保险等。',
+    s1eye:'第1步，共4步',s1title:'你是谁？',s1sub:'这决定了你在法律上有资格获得哪些项目。',
+    s1visa:'在美国的签证/居留身份',s1visa_hint:'不确定？查看你的I-94表格或护照签证章。',
+    s1fg:'你是家里第一个上大学的人吗？',s1fg_hint:'父母都没有完成4年大学学位。',
+    fg_yes:'是，第一代大学生',fg_no:'不是',fg_unsure:'不确定',
+    continue:'继续 →',back:'← 返回',
+    s2eye:'第2步，共4步',s2title:'你的学业',s2sub:'项目类型和学术成绩会影响资格。',
+    s2level:'学习阶段',s2gpa:'当前GPA',s2gpa_hint:'拖动滑块。不知道就留在0.0。',s2field:'专业领域',field_sel:'— 选择你的领域 —',
+    s3eye:'第3步，共4步',s3title:'你的财务状况',s3sub:'我们绝不存储或分享这些信息。',
+    s3income:'家庭年收入（美元）',s3income_hint:'大概数字即可。',prefer_not:'不想透露',
+    s3fafsa:'你今年填写了FAFSA吗？',s3fafsa_hint:'FAFSA是美国政府的免费表格。F-1/J-1学生无法使用。',
+    fafsa_yes:'是的，已填写',fafsa_no:'还没有',fafsa_cant:'不能 — F-1/J-1',fafsa_unsure:'不确定',
+    s4eye:'第4步，共4步',s4title:'你的背景',s4sub:'许多项目针对特定群体。勾选越多 = 匹配越多。',
+    find_btn:'查找我的福利 →',
+    res_eyebrow:'你的个性化匹配',res_title:'你有资格获得以下内容',res_sub:'真实项目，每项都有分步申请说明。',
+    restart:'← 重新开始',how_to:'如何获得',
+    chat_title:'StudentBoost 助手',chat_status:'● 在线 — 随时提问',chat_placeholder:'提问...',
+    chat_welcome:'你好！我可以回答关于奖学金、FAFSA、签证资格、住房补贴、食物项目等问题。你想了解什么？'
   }
-  var rh=document.querySelector('.results-eyebrow'); if(rh) rh.id='rEy';
-  var rs=document.querySelector('.results-header p'); if(rs) rs.id='rSub';
-}
-
-// ── LANG SWITCHER EVENTS ──
-var langBtn=document.getElementById('langBtn');
-var langMenu=document.getElementById('langMenu');
-langBtn.addEventListener('click',function(e){
-  e.stopPropagation();
-  var open=langMenu.classList.toggle('open');
-  langBtn.classList.toggle('open',open);
-});
-document.addEventListener('click',function(){langMenu.classList.remove('open');langBtn.classList.remove('open');});
-document.querySelectorAll('.lang-opt').forEach(function(opt){
-  opt.addEventListener('click',function(e){
-    e.stopPropagation();
-    applyLang(opt.getAttribute('data-l'));
-    langMenu.classList.remove('open');
-    langBtn.classList.remove('open');
+};
+var curLang='en';
+function t(k){return (LANGS[curLang]&&LANGS[curLang][k])||LANGS.en[k]||k;}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    var txt=t(k);
+    if(el.tagName==='INPUT'&&el.type==='radio'){el.nextSibling&&el.parentNode.childNodes.length>1&&(el.parentNode.lastChild.textContent=' '+txt);}
+    else el.innerHTML=txt;
   });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+    el.placeholder=t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.getElementById('progressText').textContent=t('s'+cur+'eye')||('Step '+cur+' of 4');
+}
+document.getElementById('langSwitcher').addEventListener('click',function(e){
+  var btn=e.target.closest('.lang-btn');
+  if(!btn) return;
+  curLang=btn.getAttribute('data-lang');
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b===btn);});
+  applyLang();
+  if(chatOpen) addBotMsg(t('chat_welcome'));
 });
 
-// ── CHATBOT ──
-var chatFab=document.getElementById('chatFab');
-var chatWin=document.getElementById('chatWin');
-var chatMsgs=document.getElementById('chatMsgs');
-var chatSugs=document.getElementById('chatSugs');
-var chatInp=document.getElementById('chatInp');
-var chatSend=document.getElementById('chatSend');
-var chatOpen=false;
+/* ───────────────────── STEP NAV ───────────────────── */
+var cur=1, _matches=[], _fafsaReminder=false;
 
-chatFab.addEventListener('click',function(){
-  chatOpen=!chatOpen;
-  chatWin.classList.toggle('is-open',chatOpen);
-  chatFab.classList.toggle('is-open',chatOpen);
-  if(chatOpen && chatMsgs.children.length===0) initChat();
-});
+function showStep(n){
+  document.getElementById('step'+cur).classList.add('hidden');
+  cur=n;
+  var el=document.getElementById('step'+n);
+  el.classList.remove('hidden');
+  el.style.animation='none'; el.offsetHeight; el.style.animation='';
+  for(var i=1;i<=4;i++){
+    var d=document.getElementById('dot'+i);
+    d.className='step-dot';
+    if(i<n) d.classList.add('done');
+    else if(i===n) d.classList.add('active');
+  }
+  document.getElementById('progressText').textContent=t('s'+n+'eye')||('Step '+n+' of 4');
+  document.getElementById('progressPct').textContent=Math.round((n/4)*100)+'%';
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}
+}
+function gv(n){var e=document.querySelector('[name="'+n+'"]:checked');return e?e.value:'';}
+function gcb(n){return Array.prototype.map.call(document.querySelectorAll('[name="'+n+'"]:checked'),function(e){return e.value;});}
 
-// ── Q&A KNOWLEDGE BASE ──
-var QA = [
-  {q:['fafsa','what is fafsa'],a:'FAFSA stands for Free Application for Federal Student Aid. It's a free government form that determines your eligibility for federal grants (Pell, SEOG), work-study, and loans. Go to <a href="https://studentaid.gov" target="_blank">studentaid.gov</a> to apply. It takes about 30 minutes and is 100% free.'},
-  {q:['pell grant','pell'],a:'The Pell Grant is free government money — up to $7,395/year — for low-income undergrad students. You never pay it back. Apply by completing the FAFSA at <a href="https://studentaid.gov" target="_blank">studentaid.gov</a>.'},
-  {q:['f1','f-1','international student','can international'],a:'If you're on an F-1 visa, you can't use FAFSA. But you can still get: university merit scholarships (ask your school!), Fulbright (apply from home country), Hispanic Scholarship Fund (open to any visa), and the Society of Women Engineers scholarship if you study STEM. Fill out the form above to see all your matches.'},
-  {q:['snap','food stamps','food assistance'],a:'SNAP (food stamps) gives you ~$291/month on an EBT debit card for groceries. As a college student you qualify if you: have low income AND work 20+ hrs/week, receive work-study, or have a dependent child. Search "[your state] SNAP apply online" to start.'},
-  {q:['housing','rent','section 8','dorm'],a:'You have several housing options: 1) Your Pell Grant can pay for off-campus rent — ask your financial aid office. 2) Section 8 vouchers cover most of your rent (apply now, waitlists are long). 3) Your school may have reduced-rate dorms for Pell-eligible students. 4) Emergency housing funds exist at every college — just ask!'},
-  {q:['medicaid','health insurance','healthcare','medical'],a:'If your income is under ~$21,000/year, you likely qualify for Medicaid — free health insurance with zero monthly cost. Go to <a href="https://healthcare.gov" target="_blank">healthcare.gov</a> and apply. Takes 20 minutes and coverage starts the same month.'},
-  {q:['undocumented','daca','dreamer'],a:'Options available to you: TheDream.US Scholarship (up to $33,000), Hispanic Scholarship Fund (open to all visas), emergency housing funds at your college, and campus food pantries. Federal grants like Pell are not available, but there's still significant private and institutional aid.'},
-  {q:['mental health','therapy','counseling','stress','anxiety','depression'],a:'Every accredited US college offers FREE therapy — you already paid for it with tuition. Search your school website for "counseling center." For immediate support, call or text 988 (Suicide & Crisis Lifeline) — available 24/7, fully anonymous.'},
-  {q:['veteran','military','gi bill'],a:'The GI Bill covers your full in-state tuition plus a monthly housing allowance. Apply at <a href="https://va.gov/education" target="_blank">va.gov/education</a>. You'll need your Certificate of Eligibility. This is one of the most generous education benefits in the world.'},
-  {q:['disability','vocational rehab'],a:'Vocational Rehabilitation (VR) can pay your entire tuition plus books and sometimes living expenses if you have a disability. Find your state VR agency at <a href="https://rsa.ed.gov" target="_blank">rsa.ed.gov</a>. This is one of the most underused programs in the US.'},
-  {q:['spotify','apple','microsoft','adobe','github','amazon','prime','discount'],a:'You qualify for major student discounts: Spotify+Hulu for $5.99/mo, Apple up to $200 off Mac/iPad, Microsoft 365 free (check your school first!), Adobe Creative Cloud ~$23/mo, GitHub Student Pack ($200+ free tools), Amazon Prime for $7.49/mo with a 6-month free trial. Fill out the form to see your full list.'},
-  {q:['scholarship','scholarships','find','qualify','eligible','what can'],a:'Fill out the 4-step form on this page and we'll show you every program you qualify for — scholarships, housing, food, health, tech discounts, and more. It takes 2 minutes!'},
-  {q:['foster','foster care','aging out','etv'],a:'Education and Training Vouchers (ETV) pay up to $5,000/year toward tuition or housing if you were in foster care. Available until age 26. Search "[your state] ETV scholarship foster care" to apply.'},
-  {q:['first generation','first gen','firstgen'],a:'Being first-gen opens up additional need-based aid. Make sure to check "Yes, first-gen" in the form — it helps match you with programs that prioritize students whose parents didn't graduate college.'},
-  {q:['hello','hi','hey','start','help'],a:'Hi! 👋 I'm the StudentBoost assistant. I can answer questions about scholarships, housing aid, food assistance, health insurance, and more. What would you like to know?'},
+var gpaEl=document.getElementById('gpaRange');
+var gpaDisp=document.getElementById('gpaDisplay');
+function updateGpa(){var v=parseFloat(gpaEl.value);gpaDisp.textContent=v===0?'0.0':v.toFixed(1);}
+gpaEl.addEventListener('input',updateGpa);
+gpaEl.addEventListener('change',updateGpa);
+
+document.getElementById('btn1n').addEventListener('click',function(){showStep(2);});
+document.getElementById('btn2b').addEventListener('click',function(){showStep(1);});
+document.getElementById('btn2n').addEventListener('click',function(){showStep(3);});
+document.getElementById('btn3b').addEventListener('click',function(){showStep(2);});
+document.getElementById('btn3n').addEventListener('click',function(){showStep(4);});
+document.getElementById('btn4b').addEventListener('click',function(){showStep(3);});
+document.getElementById('btn4f').addEventListener('click',run);
+document.getElementById('btnRestart').addEventListener('click',restart);
+
+/* ───────────────────── DB ───────────────────── */
+var DB=[
+{cat:"🎓 Scholarships",id:"pell",name:"Federal Pell Grant",desc:"Free government money for low-income undergrads. You never pay it back.",amount:"Up to $7,395/yr",type:"Federal Grant",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","community","vocational"],need:true,fields:[],bgs:[],url:"https://studentaid.gov/understand-aid/types/grants/pell",steps:["Go to studentaid.gov — click 'Start FAFSA'.","Log in or create a free FSA ID account.","Fill out the FAFSA form (about 30 min). Completely free.","Submit — your school gets the result automatically.","Check your school's student portal for your aid offer.","Click 'Accept' before the deadline."],deadline:"FAFSA opens Oct 1 each year. Apply early — funds run out.",note:"FREE money. You never pay this back."},
+{cat:"🎓 Scholarships",id:"seog",name:"Federal SEOG Grant",desc:"Extra free money on top of Pell Grant, for students with the most financial need.",amount:"Up to $1,000/yr",type:"Federal Grant",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","community"],need:true,fields:[],bgs:[],url:"https://studentaid.gov/understand-aid/types/grants/seog",steps:["Complete the FAFSA first (same form as Pell Grant).","Your school automatically reviews you for SEOG if your need is extreme.","If not in your aid offer, email financial aid: 'Am I eligible for SEOG?'","Accept the award in your student portal."],deadline:"First-come, first-served — file FAFSA early.",note:"Reserved for students with the highest financial need."},
+{cat:"🎓 Scholarships",id:"workstudy",name:"Federal Work-Study",desc:"A part-time on-campus job funded by the government. You earn an hourly wage — it's not a loan.",amount:"Up to $3,000/yr",type:"Work Program",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://studentaid.gov/understand-aid/types/work-study",steps:["File FAFSA and indicate interest in Work-Study.","Check your financial aid offer for the Work-Study amount.","Visit your school's student employment office.","Pick a job from their list — most are on campus.","Work 10–20 hrs/week and get paid hourly."],deadline:"File FAFSA early — spots are limited.",note:"It's a job, not a loan. Earnings won't reduce your other aid."},
+{cat:"🎓 Scholarships",id:"teach",name:"TEACH Grant",desc:"Free money for students becoming teachers in high-need subjects.",amount:"Up to $4,000/yr",type:"Federal Grant",visas:["citizen","pr"],minGpa:3.25,levels:["undergrad","grad"],need:false,fields:["education"],bgs:[],url:"https://studentaid.gov/understand-aid/types/grants/teach",steps:["Confirm: you're studying education in a high-need field (math, science, special ed).","File FAFSA.","Tell your financial aid office: 'I want to apply for the TEACH Grant.'","Sign a service agreement (4 years teaching in a low-income school).","Complete the 30-min TEACH Grant counseling at studentaid.gov."],deadline:"Rolling — ask your school each semester.",note:"⚠️ If you don't teach for 4 years post-graduation, the grant converts to a loan with interest."},
+{cat:"🎓 Scholarships",id:"gates",name:"Gates Scholarship",desc:"Full college cost covered. Extremely competitive — for high-achieving minority students with financial need.",amount:"Full tuition + fees",type:"Private Scholarship",visas:["citizen","pr"],minGpa:3.3,levels:["undergrad"],need:true,fields:[],bgs:["minority"],url:"https://www.thegatesscholarship.org",steps:["You must be a Pell-eligible minority student entering college.","Create an account at thegatesscholarship.org before Aug 1.","Complete the application: leadership, community work, goals.","Get 2 recommendation letters from teachers or mentors.","Submit your FAFSA — they cross-check financial need.","Results arrive in late March."],deadline:"September 15 each year.",note:"One of the most prestigious fully-funded US scholarships."},
+{cat:"🎓 Scholarships",id:"dream",name:"TheDream.US Scholarship",desc:"Covers most of your college tuition. Built specifically for undocumented students and Dreamers.",amount:"Up to $33,000",type:"Private Scholarship",visas:["daca","undocumented"],minGpa:2.5,levels:["undergrad","community"],need:true,fields:[],bgs:["dreamer"],url:"https://www.thedream.us",steps:["Confirm: arrived in the US before age 16 and before Nov 1, 2021.","Go to thedream.us and create an account.","Choose one of their partner colleges (required).","Complete the application: 2 essays + financial info.","Submit by the February deadline.","If accepted, funds go directly to tuition at the partner college."],deadline:"Usually February each year.",note:"Built specifically for Dreamers and undocumented students."},
+{cat:"🎓 Scholarships",id:"hispanic",name:"Hispanic Scholarship Fund",desc:"Cash scholarships for Hispanic/Latino students. Open to any visa status.",amount:"$500 – $5,000/yr",type:"Private Scholarship",visas:["citizen","pr","daca","undocumented","f1","j1","other_visa"],minGpa:3.0,levels:["undergrad","grad"],need:true,fields:[],bgs:["minority"],url:"https://www.hsf.net/scholarship",steps:["Go to hsf.net and create a free account.","Fill out the application (~1 hour).","Upload your transcript + proof of Hispanic/Latino heritage.","Write a personal statement (~500 words).","Submit by February 15.","Check your email in April for the award decision."],deadline:"February 15 each year.",note:"Open to any Hispanic student regardless of visa status."},
+{cat:"🎓 Scholarships",id:"uncf",name:"UNCF Scholarships",desc:"400+ scholarships for Black students. Create one profile and get matched automatically.",amount:"$3,000 – $10,000/yr",type:"Private Scholarship",visas:["citizen","pr"],minGpa:2.5,levels:["undergrad"],need:true,fields:[],bgs:["minority"],url:"https://uncf.org/scholarships",steps:["Go to uncf.org and create a profile.","The system auto-matches you to relevant scholarships.","Complete the matched applications (each has a short essay).","Upload transcript + proof of enrollment.","Submit before each scholarship's deadline.","Awards announced May–June."],deadline:"Varies — check your UNCF portal regularly.",note:"UNCF manages 400+ scholarships for Black students. One profile, many matches."},
+{cat:"🎓 Scholarships",id:"nsf",name:"NSF Graduate Research Fellowship",desc:"Pays your salary and tuition so you can focus entirely on STEM research.",amount:"$37,000/yr + tuition",type:"Federal Fellowship",visas:["citizen","pr"],minGpa:0,levels:["grad","phd"],need:false,fields:["stem"],bgs:[],url:"https://www.nsfgrfp.org",steps:["Confirm: you're in year 1 or 2 of a STEM graduate program.","Create an account at nsfgrfp.org.","Write 3 essays: personal statement, past research, proposed research.","Get 3 recommendation letters from faculty.","Submit by mid-October.","Results in April. Funding starts next fall."],deadline:"Mid-October — check nsfgrfp.org for your field.",note:"The most prestigious STEM fellowship in the US. Covers 3 years."},
+{cat:"🎓 Scholarships",id:"swe",name:"Society of Women Engineers Scholarship",desc:"Cash scholarships for women studying STEM. One account unlocks 200+ scholarships.",amount:"$1,000 – $15,000/yr",type:"Private Scholarship",visas:["citizen","pr","f1","j1"],minGpa:3.0,levels:["undergrad","grad"],need:false,fields:["stem"],bgs:["woman"],url:"https://scholarships.swe.org",steps:["Confirm: you identify as a woman and study STEM.","Go to scholarships.swe.org and create an account.","Apply to every scholarship you qualify for (shared form).","Write 2 essays + upload your transcript.","Get 1 recommendation letter from a professor.","Submit by February 15. Awards in May."],deadline:"February 15 each year.",note:"SWE manages 200+ scholarships. One account, multiple matches."},
+{cat:"🎓 Scholarships",id:"point",name:"Point Foundation LGBTQ Scholarship",desc:"Large scholarship for LGBTQ+ students who faced financial hardship. Can cover full tuition.",amount:"Up to full tuition",type:"Private Scholarship",visas:["citizen","pr","f1"],minGpa:3.0,levels:["undergrad","grad"],need:true,fields:[],bgs:["lgbtq"],url:"https://www.pointfoundation.org/point-apply/apply-for-scholarship/",steps:["Go to pointfoundation.org and check eligibility.","Start the application and create an account.","Write essays: LGBTQ+ identity, academic goals, community impact.","Get 2 recommendation letters.","Submit by late January.","Finalists interviewed in March. Awards in May."],deadline:"Late January each year.",note:"For LGBTQ+ students who faced financial hardship due to their identity."},
+{cat:"🎓 Scholarships",id:"fulbright",name:"Fulbright Foreign Student Program",desc:"US government scholarship for international students. Covers tuition, rent, and flights.",amount:"Full tuition + living + travel",type:"Government Scholarship",visas:["f1","j1","other_visa"],minGpa:3.5,levels:["grad","phd"],need:false,fields:[],bgs:[],url:"https://foreign.fulbrightonline.org",steps:["Go to foreign.fulbrightonline.org — confirm your country has a Fulbright Commission.","Apply from YOUR HOME COUNTRY through your local Fulbright office.","Gather: transcript, 3 recommendation letters, research proposal.","Submit by your country's local deadline.","If selected: J-1 visa + full funding for tuition, living, and travel."],deadline:"Varies by country — usually Feb–June before you start.",note:"Must apply from your home country. The most prestigious government scholarship."},
+{cat:"🎓 Scholarships",id:"intluni",name:"University Merit Aid (International)",desc:"Most US universities give money to international students based on grades — not citizenship.",amount:"$5,000 – Full tuition",type:"Institutional Aid",visas:["f1","j1","other_visa"],minGpa:3.5,levels:["undergrad","grad","phd"],need:false,fields:[],bgs:[],url:"https://international.collegeboard.org",steps:["List every US university you're applying to or attending.","Visit each school's international admissions page. Search 'scholarships for international students'.","Collect requirements (essays + transcript).","Submit by the admissions deadline.","Ask your counselor: 'Is there merit aid I haven't been offered?'","Accept the best offer."],deadline:"Usually Nov 1 (Early) or Jan 1 (Regular).",note:"800+ US universities offer merit aid to international students."},
+{cat:"🎓 Scholarships",id:"gibill",name:"GI Bill (VA Education Benefits)",desc:"If you served in the US military, the government pays your tuition plus a monthly housing allowance.",amount:"Full in-state tuition + housing",type:"Veterans Benefit",visas:["citizen","pr"],minGpa:0,levels:["undergrad","grad","vocational","community"],need:false,fields:[],bgs:["veteran"],url:"https://www.va.gov/education/about-gi-bill-benefits/",steps:["Confirm: served at least 90 days active duty (Post-9/11 GI Bill).","Go to va.gov/education → 'Apply for education benefits'.","Fill out VA Form 22-1990 online (~30 min).","Receive your Certificate of Eligibility (COE) by mail in 2–4 weeks.","Bring COE to your school's Veterans Services office.","VA pays tuition directly + monthly housing allowance deposited to you."],deadline:"No deadline — apply anytime after separating.",note:"If you served, this may cover 100% of your tuition."},
+{cat:"🎓 Scholarships",id:"vr",name:"Vocational Rehabilitation Aid",desc:"A state program that pays for college for students with disabilities — tuition, books, and sometimes rent.",amount:"Tuition + living expenses",type:"State/Federal Program",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","vocational","community"],need:false,fields:[],bgs:["disability"],url:"https://rsa.ed.gov/about/programs/vocational-rehabilitation-state-grants",steps:["Find your state's VR agency at rsa.ed.gov.","Call or email to request an intake appointment.","Attend with proof of disability (doctor's note or diagnosis).","Work with your VR counselor to create an Individualized Plan for Employment.","Once approved, VR can pay tuition, books, tools, sometimes living costs.","Check in each semester to stay enrolled."],deadline:"Rolling — apply ASAP, some states have waitlists.",note:"One of the most overlooked programs in the US. Call your state VR office today."},
+{cat:"🎓 Scholarships",id:"etv",name:"Education & Training Vouchers (ETV)",desc:"A federal voucher that pays your tuition or rent if you were in the foster care system. Available until age 26.",amount:"Up to $5,000/yr",type:"Federal Voucher",visas:["citizen","pr"],minGpa:0,levels:["undergrad","vocational","community"],need:false,fields:[],bgs:["foster"],url:"https://www.childwelfare.gov/topics/systemwide/youth/foster-care/",steps:["Confirm: in foster care at age 16+ or aged out of the system.","Search '[your state] ETV scholarship foster care' for your state's program.","Fill out the state application (asks about your foster care history).","If approved, the voucher is paid directly to your school.","Reapply each year until age 26."],deadline:"Varies by state — apply before each academic year.",note:"Call your state child welfare office for exact steps."},
+{cat:"🏠 Housing",id:"housing_fafsa",name:"FAFSA Housing Aid",desc:"Your government grants (Pell, SEOG) can pay for rent — not just tuition.",amount:"Included in aid package",type:"Federal Aid",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://studentaid.gov",steps:["Complete the FAFSA — housing is part of your Cost of Attendance (COA).","Your grants can be used for on- or off-campus housing.","When you get your aid offer, it includes a housing allowance.","Ask your financial aid office: 'Can I use my aid for off-campus rent?'","Unspent grant money is disbursed to you directly to cover rent."],deadline:"Apply to FAFSA by your school's priority deadline.",note:"Your Pell Grant isn't just for tuition — it covers housing costs too."},
+{cat:"🏠 Housing",id:"housing_section8",name:"Section 8 Housing Voucher",desc:"The government pays most of your rent directly to your landlord. Waitlists are long — apply now.",amount:"Covers most of your rent",type:"Federal Program",visas:["citizen","pr"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://www.hud.gov/topics/housing_choice_voucher_program_section_8",steps:["Find your local Public Housing Agency (PHA): search '[city] public housing agency HUD'.","Apply for the Housing Choice Voucher waitlist.","Waitlists can be months to years long — apply now.","Once approved, you get a voucher covering rent above 30% of your income.","Find a landlord who accepts Section 8 vouchers.","PHA pays your landlord directly. You pay only your share."],deadline:"Waitlists open and close — check your local PHA regularly.",note:"Apply now even if you don't need it yet. Waitlists are very long."},
+{cat:"🏠 Housing",id:"housing_emergency",name:"Emergency Housing Fund",desc:"Fast cash from your college if you're about to lose your housing. Every accredited college must have this.",amount:"$500 – $5,000 one-time",type:"College Fund",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://studentaid.gov",steps:["Go to your school's financial aid or Dean of Students office.","Ask: 'Do you have an emergency housing or basic needs fund?'","Fill out a short application — usually just a brief description of your situation.","Most schools process within 1–2 business days.","Funds are given to you directly or paid to your landlord."],deadline:"No fixed deadline — apply in a crisis.",note:"Almost every college has emergency funds. You don't need to be in extreme poverty to qualify."},
+{cat:"🍎 Food",id:"snap",name:"SNAP (Food Stamps)",desc:"A monthly allowance loaded onto a debit card for groceries. ~$291/month. Most eligible students never claim this.",amount:"~$291/month",type:"Federal Program",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://www.fns.usda.gov/snap/students",steps:["Check exemptions: you need low income PLUS one of: work 20+ hrs/week, receive work-study, have a dependent child.","Search '[your state] SNAP apply online'.","Fill out the online application (~30 min).","Attend a brief phone interview after applying.","If approved, you get an EBT card loaded monthly.","Use at grocery stores, farmers markets, and many online stores."],deadline:"Rolling — apply anytime. Processing takes ~30 days.",note:"60% of eligible college students don't claim this. Working 20+ hrs/week? You almost certainly qualify."},
+{cat:"🍎 Food",id:"campus_pantry",name:"Campus Food Pantry",desc:"Free groceries at your college. No appointment, no paperwork — just show up with your student ID.",amount:"Free groceries",type:"College Resource",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://www.feedingamerica.org/find-your-local-foodbank",steps:["Search your school's website for 'food pantry' or 'basic needs'.","Most are no-appointment, no-questions-asked — just show up with your student ID.","Visit weekly for non-perishables, produce, and sometimes toiletries.","No pantry on campus? Check feedingamerica.org for the nearest community food bank."],deadline:"Open year-round.",note:"No stigma, no paperwork. 700+ US colleges have food pantries."},
+{cat:"🍎 Food",id:"wic",name:"WIC — Women, Infants & Children",desc:"Government food program for pregnant students or student parents with young kids.",amount:"$50 – $100/month in food vouchers",type:"Federal Program",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:["parent"],url:"https://www.fns.usda.gov/wic",steps:["Confirm: pregnant, breastfeeding, or have a child under 5, with low-to-medium income.","Find your local WIC office at fns.usda.gov/wic/contacts.","Schedule an appointment (walk-ins accepted at many offices).","Bring: ID, proof of income, and proof of pregnancy or child's birth certificate.","If approved, you get a WIC-EBT card for specific healthy foods."],deadline:"Rolling — apply anytime.",note:"If you're a student parent with a young child, this is one of the most valuable benefits available."},
+{cat:"🏥 Health",id:"medicaid",name:"Medicaid",desc:"Free health insurance for low-income people. Zero monthly cost, zero deductible.",amount:"Free or near-free",type:"Federal/State Program",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://healthcare.gov",steps:["Go to healthcare.gov.","Click 'See if you qualify for Medicaid'.","Enter your state, income, and household size.","Income below ~$21,000/year (single adult)? You likely qualify.","Apply directly — takes about 20 minutes.","If approved, you get a Medicaid card. See doctors, dentists, and therapists free or near-free."],deadline:"Rolling — coverage starts the month you apply.",note:"Most low-income students qualify and have no idea. Zero premium, zero deductible in most states."},
+{cat:"🏥 Health",id:"aca_marketplace",name:"ACA Subsidized Health Plan",desc:"Discounted health insurance on the government marketplace. Under $50k income? Could be $0–$50/month.",amount:"As low as $0/month",type:"Federal Program",visas:["citizen","pr","daca"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:true,fields:[],bgs:[],url:"https://healthcare.gov",steps:["Go to healthcare.gov during Open Enrollment (Nov 1 – Jan 15).","Create an account and enter your household info.","Compare plans — the site shows your cost after subsidies.","Pick a Silver plan for the best cost/coverage balance.","Complete enrollment and pay your first premium."],deadline:"Open Enrollment: Nov 1 – Jan 15 each year.",note:"Under $50k income? Your premium could be $0–$50/month after subsidies."},
+{cat:"🏥 Health",id:"ship",name:"Student Health Insurance (SHIP)",desc:"Health insurance through your university at a group rate. Required for most F-1 and J-1 students.",amount:"~$500–$2,000/yr vs $5,000+ elsewhere",type:"School Plan",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","phd"],need:false,fields:[],bgs:[],url:"https://healthcare.gov/young-adults/college-students/",steps:["Go to your school's health services website and search 'SHIP' or 'Student Health Insurance'.","Compare SHIP cost and coverage to Medicaid and ACA plans first.","Enroll during your school's open enrollment window (usually Aug–Sept).","Premium is charged to your student account.","Use your campus health center first — it's often free or low-cost with SHIP."],deadline:"School's open enrollment — usually August–September.",note:"F-1 and J-1 students often must carry health insurance. SHIP is the most practical option."},
+{cat:"🧠 Mental Health",id:"counseling_free",name:"Free Campus Counseling",desc:"Every accredited US college must offer free therapy. You already paid for it in tuition.",amount:"Free sessions",type:"College Resource",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:false,fields:[],bgs:[],url:"https://988lifeline.org",steps:["Search your school's website for 'counseling center' or 'mental health services'.","Call or book online — first appointment usually within 1–2 weeks.","First few sessions are free with your student enrollment.","No diagnosis needed — stress, anxiety, and overwhelm are all valid reasons.","Ask about group therapy (shorter waitlists, still free)."],deadline:"No deadline — book whenever you're ready.",note:"Every accredited US college has free mental health services. You already paid for it with tuition."},
+{cat:"🧠 Mental Health",id:"crisis_line",name:"988 Crisis & Suicide Lifeline",desc:"Free 24/7 phone and chat line. Call or text 988. You don't need to be in crisis — stress counts too.",amount:"Free 24/7",type:"Federal Program",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:false,fields:[],bgs:[],url:"https://988lifeline.org",steps:["Call or text 988 from any US phone at any time.","Connected to a trained counselor immediately.","Online chat: go to 988lifeline.org and click 'Chat'.","Fully anonymous — no insurance, no ID, no name required.","In immediate danger? Call 911 or go to the nearest ER."],deadline:"Available 24/7/365.",note:"You don't need to be suicidal to call. Stress and feeling overwhelmed is enough."},
+{cat:"🚌 Transportation",id:"transit",name:"Student Transit Pass",desc:"Many cities give students 50–100% off buses, trains, and subway.",amount:"50–100% off public transit",type:"City/College Program",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:false,fields:[],bgs:[],url:"https://www.transit.dot.gov",steps:["Search '[your city] student transit pass' to check local options.","Check your school's student services page — many include a pass in your fees.","If included, your student ID is your transit card — just tap it.","If not included, apply for the discounted student rate on the transit authority's website."],deadline:"Check each semester.",note:"In NYC, Boston, LA, and Chicago, students get 50%+ off. Many schools pay outright."},
+{cat:"💻 Tech & Tools",id:"github",name:"GitHub Student Developer Pack",desc:"Free developer tools worth $200+. Includes GitHub Copilot (AI coding assistant worth $100/yr).",amount:"$200+ in free tools",type:"Free Bundle",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","phd","community","vocational"],need:false,fields:[],bgs:[],url:"https://education.github.com/pack",steps:["Go to education.github.com/pack.","Sign in with a GitHub account (create one free if needed).","Click 'Get your pack' and verify with your .edu email or student ID.","Approved in 24–48 hrs — unlocks free GitHub Copilot, cloud credits, and 100+ tools."],deadline:"Apply anytime.",note:"Free GitHub Copilot alone is worth $100/yr. Essential for any student in tech."},
+{cat:"💻 Tech & Tools",id:"spotify",name:"Spotify + Hulu Student Bundle",desc:"Spotify Premium AND Hulu together for $5.99/month — less than Spotify alone at full price.",amount:"$5.99/mo (vs $16.99 regular)",type:"Private Discount",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:false,fields:[],bgs:[],url:"https://www.spotify.com/us/student/",steps:["Go to spotify.com/us/student.","Click 'Get started'.","Verify enrollment via SheerID (school name + student email).","Pay $5.99/month — includes Spotify Premium AND Hulu (with ads)."],deadline:"Available anytime.",note:"Valid for up to 4 years of enrollment."},
+{cat:"💻 Tech & Tools",id:"microsoft",name:"Microsoft 365 — Free",desc:"Word, Excel, PowerPoint, Teams, and 1TB cloud storage — free for students.",amount:"Free (vs $100/yr)",type:"College Benefit",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","phd","community","vocational"],need:false,fields:[],bgs:[],url:"https://www.microsoft.com/en-us/education/products/office",steps:["Search '[your school] free Microsoft Office' to check if your school provides it.","Most schools give all enrolled students Office 365 free.","Download Word, Excel, PowerPoint, Teams, and 1TB OneDrive storage.","If not via school: go to microsoft.com/education, enter your .edu email, and verify."],deadline:"Valid while enrolled.",note:"You almost certainly already have this — check your school's IT page first."},
+{cat:"🎟️ Everyday Discounts",id:"amazon",name:"Amazon Prime Student",desc:"Half-price Amazon Prime with a free 6-month trial. 2-day shipping + Prime Video.",amount:"$7.49/mo (vs $14.99 regular)",type:"Private Discount",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:false,fields:[],bgs:[],url:"https://www.amazon.com/primestudent",steps:["Go to amazon.com/primestudent.","Click 'Try Prime Student FREE for 6 months'.","Verify with your .edu email.","Get free 2-day shipping, Prime Video, and Prime Music free for 6 months, then $7.49/mo."],deadline:"No deadline.",note:"6-month free trial, then half-price."},
+{cat:"🎟️ Everyday Discounts",id:"unidays",name:"UNiDAYS Student Discounts",desc:"Free verified student discounts at 100+ brands — Nike, ASOS, Samsung, Lenovo, and more.",amount:"100s of verified discounts",type:"Platform",visas:["citizen","pr","daca","f1","j1","other_visa","undocumented"],minGpa:0,levels:["undergrad","grad","community","vocational"],need:false,fields:[],bgs:[],url:"https://www.myunidays.com",steps:["Go to myunidays.com and create a free account.","Verify with your .edu email or student ID.","Browse 100+ brands with discounts.","Click a brand, get your discount code, and shop."],deadline:"No deadline.",note:"Free to join. One verification unlocks discounts across hundreds of stores."},
 ];
 
-var SUGS_DEFAULT = ['What is FAFSA?','Can F-1 students get aid?','Free food programs?','Health insurance options'];
+/* ───────────────────── MATCHING ───────────────────── */
+function run(){
+  var visa=gv('visa'),fg=gv('firstgen'),level=gv('level');
+  var gpa=parseFloat(gpaEl.value);
+  var field=document.getElementById('field').value||'';
+  var income=gv('income'),fafsa=gv('fafsa');
+  var bgs=gcb('bg');
+  var fafsaNo=(fafsa==='no'||fafsa==='unsure');
+  _fafsaReminder=['citizen','pr','daca'].indexOf(visa)!==-1&&fafsaNo;
+  _matches=DB.filter(function(p){
+    if(visa&&p.visas.indexOf(visa)===-1) return false;
+    if(p.levels.length&&level&&p.levels.indexOf(level)===-1) return false;
+    if(gpa>0&&p.minGpa>0&&gpa<p.minGpa) return false;
+    if(p.fields.length&&field&&p.fields.indexOf(field)===-1) return false;
+    if(p.bgs.length){var ok=false;for(var i=0;i<p.bgs.length;i++){if(bgs.indexOf(p.bgs[i])!==-1){ok=true;break;}}if(!ok) return false;}
+    if(p.need&&income==='3'&&fg==='no') return false;
+    return true;
+  });
+  renderResults();
+}
 
-function botReply(text){
-  var m=document.createElement('div');m.className='cmsg bot';m.innerHTML=text;
-  chatMsgs.appendChild(m);
-  chatMsgs.scrollTop=chatMsgs.scrollHeight;
+/* ───────────────────── RENDER ───────────────────── */
+function renderResults(){
+  for(var i=1;i<=4;i++) document.getElementById('step'+i).classList.add('hidden');
+  document.getElementById('progressWrap').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('matchCount').textContent=_matches.length+' benefit'+(_matches.length!==1?'s':'')+' found';
+  var cats={};
+  _matches.forEach(function(m){if(!cats[m.cat])cats[m.cat]=[];cats[m.cat].push(m);});
+  var catKeys=Object.keys(cats);
+  var tabsEl=document.getElementById('catTabs');
+  tabsEl.innerHTML='';
+  if(catKeys.length>1){
+    var allBtn=document.createElement('button');
+    allBtn.className='cat-btn active';allBtn.textContent='All ('+_matches.length+')';
+    allBtn.addEventListener('click',function(){setActive(allBtn);renderList('all',cats);});
+    tabsEl.appendChild(allBtn);
+    catKeys.forEach(function(k){
+      var b=document.createElement('button');b.className='cat-btn';
+      b.textContent=k+' '+cats[k].length;
+      b.addEventListener('click',(function(key,btn){return function(){setActive(btn);renderList(key,cats);};})(k,b));
+      tabsEl.appendChild(b);
+    });
+  }
+  renderList('all',cats);
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}
 }
-function userMsg(text){
-  var m=document.createElement('div');m.className='cmsg user';m.textContent=text;
-  chatMsgs.appendChild(m);
-  chatMsgs.scrollTop=chatMsgs.scrollHeight;
+function setActive(el){Array.prototype.forEach.call(document.querySelectorAll('.cat-btn'),function(b){b.classList.remove('active');});el.classList.add('active');}
+function renderList(cat,cats){
+  var list=document.getElementById('resultsList');list.innerHTML='';
+  var toShow=cat==='all'?cats:{};
+  if(cat!=='all'){toShow[cat]=cats[cat]||[];}
+  var keys=Object.keys(toShow);
+  if(!keys.length||!_matches.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>No matches here</h3><p>Try another category or go back and adjust your answers.</p></div>';return;}
+  if(_fafsaReminder&&(cat==='all'||cat==='🎓 Scholarships')){
+    var fa=document.createElement('div');fa.className='alert-card';
+    fa.innerHTML='<div class="alert-head"><span style="font-size:16px">⚠️</span><div><div class="alert-title">File your FAFSA first</div><div class="alert-sub">Many of your matches require it. It\'s free and takes 30 minutes.</div></div></div><div style="padding:0 20px 16px"><div class="step-list"><div class="step-item"><span class="step-num">1</span><span class="step-text">Go to <a href="https://studentaid.gov" target="_blank" rel="noopener noreferrer">studentaid.gov</a> and create a free FSA ID.</span></div><div class="step-item"><span class="step-num">2</span><span class="step-text">Log in and click "Start FAFSA" for the current year.</span></div><div class="step-item"><span class="step-num">3</span><span class="step-text">Complete it (~30 min). 100% free.</span></div><div class="step-item"><span class="step-num">4</span><span class="step-text">Submit. Your school sends you an aid offer.</span></div></div></div>';
+    list.appendChild(fa);
+  }
+  keys.forEach(function(k){
+    var sec=document.createElement('div');sec.className='cat-section';
+    var h=document.createElement('div');h.className='cat-heading';h.textContent=k;sec.appendChild(h);
+    (cat==='all'?cats[k]:toShow[k]).forEach(function(p){sec.appendChild(buildCard(p));});
+    list.appendChild(sec);
+  });
 }
-function showTyping(){
-  var t=document.createElement('div');t.className='cmsg bot';t.id='typing';
-  t.innerHTML='<div class="tdots"><span></span><span></span><span></span></div>';
-  chatMsgs.appendChild(t);chatMsgs.scrollTop=chatMsgs.scrollHeight;
+function buildCard(p){
+  var c=document.createElement('div');c.className='rcard';
+  var nb=p.need?'<span class="badge badge-need">Need-based</span>':'<span class="badge badge-open">Open to all</span>';
+  var gb=p.minGpa>0?'<span class="badge badge-gpa">Min GPA '+p.minGpa+'</span>':'';
+  var sh=p.steps.map(function(s,i){return '<div class="step-item"><span class="step-num">'+(i+1)+'</span><span class="step-text">'+s+'</span></div>';}).join('');
+  var nh=p.note?'<div class="notebox">💡 '+p.note+'</div>':'';
+  c.innerHTML=
+    '<div class="rcard-head">'+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="rcard-title">'+p.name+'</div>'+
+        '<div class="rcard-desc">'+p.desc+'</div>'+
+        '<div class="badges"><span class="badge badge-type">'+p.type+'</span>'+nb+gb+'</div>'+
+      '</div>'+
+      '<div class="rcard-amount">'+p.amount+'</div>'+
+    '</div>'+
+    '<div class="rcard-body">'+
+      '<div class="steps-label">'+t('how_to')+'</div>'+
+      '<div class="step-list">'+sh+'</div>'+
+      '<div class="card-footer">'+
+        '<span class="deadline-pill">⏰ '+p.deadline+'</span>'+
+        '<a class="apply-link" href="'+p.url+'" target="_blank" rel="noopener noreferrer">Apply →</a>'+
+      '</div>'+nh+
+    '</div>';
+  return c;
 }
-function hideTyping(){var t=document.getElementById('typing');if(t)t.remove();}
+function restart(){
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('progressWrap').classList.remove('hidden');
+  _matches=[];_fafsaReminder=false;cur=1;
+  document.getElementById('step1').classList.remove('hidden');
+  for(var i=1;i<=4;i++){var d=document.getElementById('dot'+i);d.className='step-dot';if(i===1)d.classList.add('active');}
+  document.getElementById('progressText').textContent=t('s1eye');
+  document.getElementById('progressPct').textContent='25%';
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}
+}
 
-function findAnswer(q){
-  q=q.toLowerCase();
+/* ───────────────────── CHATBOT ───────────────────── */
+var chatOpen=false;
+var chatMessagesEl=document.getElementById('chatMessages');
+var chatBubble=document.getElementById('chatBubble');
+var chatPanel=document.getElementById('chatPanel');
+var chatInput=document.getElementById('chatInput');
+var chatSugs=document.getElementById('chatSugs');
+
+var SUGGESTIONS=['What is FAFSA?','Can F-1 students get scholarships?','What food help is available?','I have no insurance. What can I do?','Can undocumented students get aid?'];
+
+var QA=[
+  {q:['what is fafsa','what does fafsa mean','fafsa'],a:'FAFSA stands for Free Application for Federal Student Aid. It\'s a free form at studentaid.gov. Filling it out unlocks Pell Grants, Work-Study, low-interest loans, and more. Takes about 30 minutes. Never pay anyone to help you — it\'s free.'},
+  {q:['pell grant','pell'],a:'The Pell Grant gives up to $7,395/year to low-income undergrads. It\'s FREE money — you never pay it back. You get it by filing FAFSA at studentaid.gov. Open only to US citizens, green card holders, and DACA recipients.'},
+  {q:['f-1','f1 student','international student','can international'],a:'Yes! F-1 students can access: university merit aid, the Fulbright scholarship, the Hispanic Scholarship Fund, SWE scholarships (for women in STEM), the Point Foundation (LGBTQ+), and GitHub Student Pack. FAFSA and federal grants like Pell are not available to F-1 students.'},
+  {q:['undocumented','daca','dreamer'],a:'Undocumented students and DACA recipients can access: TheDream.US scholarship (up to $33,000), the Hispanic Scholarship Fund, university merit aid at many schools, emergency housing/food funds, campus food pantries, and GitHub Student Pack. FAFSA is available for DACA recipients but not undocumented students.'},
+  {q:['food','snap','food stamp','hungry','eat','grocery'],a:'Three options: 1) SNAP (food stamps) — a monthly debit card for groceries. ~$291/month. You need low income and must work 20+ hrs/week or have a dependent. 2) Campus Food Pantry — free groceries at your school, no paperwork, just show your student ID. 3) WIC — for pregnant students or those with children under 5.'},
+  {q:['housing','rent','homeless','apartment','section 8'],a:'Options: 1) FAFSA Housing Aid — your Pell Grant covers rent, not just tuition. Ask financial aid. 2) Section 8 — government pays most of your rent. Apply now, waitlists are long. 3) Emergency Housing Fund — fast cash from your college if you\'re at risk. Every accredited school has one. Just ask.'},
+  {q:['health','insurance','doctor','sick','medical'],a:'Options by visa: US citizens/PR/DACA → check Medicaid first (free if income under ~$21k/year), then ACA marketplace (can be $0/month under $50k), or stay on parent\'s plan until 26. F-1/J-1 → Student Health Insurance Plan (SHIP) through your university is usually required and cheapest. All students → use your campus health center, often free.'},
+  {q:['mental health','therapy','counseling','anxiety','depressed','stress'],a:'1) Free campus counseling — every accredited college has it, you already paid for it with tuition. Search "[your school] counseling center". 2) 988 Lifeline — call or text 988, free, 24/7, anonymous. 3) BetterHelp — online therapy, up to 40% off for students. No diagnosis needed for any of these.'},
+  {q:['veteran','military','gi bill'],a:'If you served in the US military, the GI Bill at the VA pays your full in-state tuition plus a monthly housing allowance. Apply at va.gov/education. You also get priority registration and dedicated veterans services offices at most universities.'},
+  {q:['disability','disabled'],a:'Vocational Rehabilitation (VR) is a state program that pays for college — tuition, books, and sometimes living costs — for students with disabilities. It\'s massively underused. Find your state\'s VR agency at rsa.ed.gov. Also, campus disability services can extend test time, provide notetakers, and more.'},
+  {q:['lgbtq','gay','lesbian','transgender','queer'],a:'The Point Foundation offers scholarships up to full tuition for LGBTQ+ students who faced financial hardship. Apply at pointfoundation.org. Also, many universities have dedicated LGBTQ+ resource centers offering emergency funds and counseling.'},
+  {q:['tech','laptop','software','computer','microsoft','github','adobe','spotify'],a:'Best tech deals: 1) GitHub Student Pack — free Copilot + 100+ tools ($200+ value). 2) Microsoft 365 — free through most schools. 3) Spotify + Hulu — $5.99/month. 4) Adobe Creative Cloud — 60% off ($23/month). 5) Apple — up to $200 off a Mac. Check your school first for free software licenses.'},
+  {q:['transport','bus','train','transit','commute'],a:'Search "[your city] student transit pass" — many cities give 50–100% off. Also: Amtrak gives 15% off at checkout (select Student). Zipcar student membership is $25/year (normally $90).'},
+  {q:['gpa','grade','academic'],a:'GPA matters for some scholarships: Gates Scholarship needs 3.3+, NSF Fellowship needs strong research not GPA, TEACH Grant needs 3.25+, Fulbright needs 3.5+. Most need-based programs (Pell, SNAP, Medicaid, housing) have no GPA requirement at all.'},
+  {q:['what can i get','what am i eligible','what programs','help me'],a:'Fill out the 4-step form above! It filters all 33+ programs by your visa status, income, GPA, and background — and shows you only the ones you actually qualify for, with step-by-step instructions.'},
+];
+
+function botAnswer(msg){
+  var low=msg.toLowerCase();
   for(var i=0;i<QA.length;i++){
     for(var j=0;j<QA[i].q.length;j++){
-      if(q.indexOf(QA[i].q[j])!==-1) return QA[i].a;
+      if(low.indexOf(QA[i].q[j])!==-1) return QA[i].a;
     }
   }
-  return null;
+  return 'I\'m not sure about that specific question. Try asking about: FAFSA, Pell Grant, F-1 scholarships, food stamps (SNAP), housing aid, health insurance, mental health, tech discounts, or veterans benefits. Or use the form above to see everything you qualify for!';
 }
 
-function setSugs(list){
+function addBotMsg(text){
+  var m=document.createElement('div');m.className='chat-msg bot';m.textContent=text;
+  chatMessagesEl.appendChild(m);
+  chatMessagesEl.scrollTop=chatMessagesEl.scrollHeight;
+}
+function addUserMsg(text){
+  var m=document.createElement('div');m.className='chat-msg user';m.textContent=text;
+  chatMessagesEl.appendChild(m);
+  chatMessagesEl.scrollTop=chatMessagesEl.scrollHeight;
+}
+function renderSugs(){
   chatSugs.innerHTML='';
-  list.forEach(function(s){
-    var b=document.createElement('button');b.className='sug';b.textContent=s;
-    b.addEventListener('click',function(){handleSend(s);});
+  SUGGESTIONS.forEach(function(s){
+    var b=document.createElement('button');b.className='chat-sug';b.textContent=s;
+    b.addEventListener('click',function(){sendChat(s);});
     chatSugs.appendChild(b);
   });
 }
-
-function handleSend(text){
-  text=(text||chatInp.value).trim();if(!text)return;
-  chatInp.value='';
-  userMsg(text);
-  setSugs([]);
-  showTyping();
-  setTimeout(function(){
-    hideTyping();
-    var ans=findAnswer(text);
-    if(ans){
-      botReply(ans);
-    } else {
-      botReply('I'm not sure about that specific question. Try filling out the 4-step form above — it will match you to every program you qualify for. Or ask me about: FAFSA, housing aid, food stamps, health insurance, scholarships for international students, or mental health support.');
-    }
-    setSugs(['What is FAFSA?','Housing help','Free food?','Health insurance']);
-  },600);
+function sendChat(msg){
+  if(!msg.trim()) return;
+  addUserMsg(msg);
+  chatInput.value='';
+  chatSugs.innerHTML='';
+  setTimeout(function(){addBotMsg(botAnswer(msg));},300);
 }
 
-function initChat(){
-  botReply('Hi! 👋 I'm your StudentBoost assistant. I know everything about student benefits, scholarships, and financial aid in the US.<br/>What can I help you with?');
-  setSugs(SUGS_DEFAULT);
-}
+chatBubble.addEventListener('click',function(){
+  chatOpen=!chatOpen;
+  chatPanel.classList.toggle('hidden',!chatOpen);
+  if(chatOpen&&chatMessagesEl.children.length===0){
+    addBotMsg(t('chat_welcome'));
+    renderSugs();
+  }
+});
+document.getElementById('chatSend').addEventListener('click',function(){sendChat(chatInput.value);});
+chatInput.addEventListener('keydown',function(e){if(e.key==='Enter') sendChat(chatInput.value);});
 
-chatSend.addEventListener('click',function(){handleSend();});
-chatInp.addEventListener('keydown',function(e){if(e.key==='Enter')handleSend();});
-
-// Init IDs and language
-assignIds();
-// detect browser language
-var bl=(navigator.language||'en').substring(0,2).toLowerCase();
-if(T[bl]) applyLang(bl); else applyLang('en');
+/* ───────────────────── INIT ───────────────────── */
+applyLang();
 
 })();
 </script>
