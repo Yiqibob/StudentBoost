@@ -10,17 +10,17 @@ You answer 4 short questions. StudentBoost matches you to real programs you can 
 
 | Category | Examples |
 |---|---|
-| 🎓 Scholarships | Pell Grant, Gates Scholarship, Fulbright, GI Bill |
-| 🏠 Housing | Section 8, FAFSA housing aid, emergency funds |
-| 🍎 Food | SNAP, campus food pantry, WIC |
-| 🏥 Health | Medicaid, ACA marketplace, student health plans |
-| 🧠 Mental Health | Free campus counseling, 988 crisis line, BetterHelp discount |
-| 🚌 Transportation | Student transit passes, Amtrak 15% off, Zipcar |
-| 💻 Tech & Discounts | GitHub Student Pack, Spotify+Hulu $6/mo, Apple/Adobe student pricing |
+|  **Scholarships** | Pell Grant, Gates Scholarship, Fulbright, GI Bill |
+|  **Housing** | Section 8, FAFSA housing aid, emergency funds |
+|  **Food** | SNAP, campus food pantry, WIC |
+|  **Health** | Medicaid, ACA marketplace, student health plans |
+|  **Mental Health** | Free campus counseling, 988 crisis line, BetterHelp discount |
+|  **Transportation** | Student transit passes, Amtrak 15% off, Zipcar |
+|  **Tech & Discounts** | GitHub Student Pack, Spotify+Hulu $6/mo, Apple/Adobe student pricing |
 
 ## Who it's for
 
-Any student — citizens, green card holders, F-1/J-1 visa holders, DACA recipients, and undocumented students. Results are filtered by your actual visa status.
+Any student. It doesn't matter if you are a citizen, green card holder, F-1/J-1 visa holder, DACA recipient, or undocumented student. Results are filtered by your actual visa status.
 
 ## How to use
 
@@ -32,10 +32,8 @@ Open `scholarship-finder.html` in any browser. No install, no account, no server
 - 33 real programs in the database
 - Plain-English description for every program ("Free money you never pay back")
 - Numbered step-by-step apply instructions on every result
-- Language switcher (English, Spanish, French, German, Chinese)
-- Built-in chatbot for eligibility questions
 - Mobile-friendly, accessible, dark mode UI
-- Works fully offline — no external API calls
+- Works fully offline, no external API calls
 
 ## Tech
 
